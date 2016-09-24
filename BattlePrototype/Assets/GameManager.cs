@@ -2,8 +2,12 @@
 using UnityEngine.UI;
 using System.Collections;
 using System.Collections.Generic;
+using System;
+using Random = UnityEngine.Random;
 
 public class GameManager : MonoBehaviour {
+	public Vector3 mapPosition = new Vector3 (-500, -500, 0);
+
 
 	public static GameManager instance;
 	public static GameManager getInstance() {
@@ -21,6 +25,11 @@ public class GameManager : MonoBehaviour {
 	/************************************** For Battle Stage Start **************************************/
 	/************************************** For Battle Stage Start **************************************/
 	/************************************** For Battle Stage Start **************************************/
+
+	// Active units
+	public GameObject activePlayer;
+	public GameObject activeEnemy;
+
 	// Buttons
 	public Button leftButton;
 	public Button rightButton;
@@ -155,6 +164,82 @@ public class GameManager : MonoBehaviour {
 	public bool enemyUnitIsChosen; // If Unit is chosen
 	public GameObject[] enemyUnits; // Collection of player units
 	public int enemyChosenUnitIdx; // idx of Unit is chosen
+
+	/******************** Mengshen's ************************/
+	public GameObject TilePrefab;
+	public GameObject UserPlayerPrefab;
+	public GameObject AIPlayerPrefab;
+	// Use this for initialization
+	List<List<Tile>> map;
+	List<UserPlayer> userPlayers;
+	List<AIPlayer> aiPlayers;
+	Player currentPlayer;
+	public int mapSize = 12;
+
+//	void Start () {
+//		generateMap();
+//		generatePlayer();
+//	}
+	public void setCurrentPlayer(Player p){
+		currentPlayer = p;
+	}
+	public Player getCurrentPlayer(){
+		return currentPlayer;
+	}
+	public static int mDistance(Vector3 v1, Vector3 v2){
+		return (int)Math.Round(Math.Abs (v1 [0] - v2 [0]) + Math.Abs (v1 [1] - v2 [1]));
+	}
+	public void moveCurrentPlayer(Tile destTile) {
+		Player p = currentPlayer;
+		if (mDistance(p.moveDestination, destTile.transform.position) <= 3){
+			p.moveDestination = destTile.transform.position;
+		}
+	}
+
+	void generateMap() {
+		map = new List<List<Tile>>();
+		for (int i = 0; i < mapSize; i ++) {
+			List<Tile> row = new List<Tile>();
+			for (int j = 0; j < mapSize; j++) {
+				//Tile tile = ((GameObject)Instantiate(TilePrefab, new Vector3(i - Mathf.Floor(mapSize/2),0, -j + Mathf.Floor(mapSize / 2)), Quaternion.Euler(new Vector3()))).GetComponent<Tile>();
+				//tile.gridPosition = new Vector2(i, j);
+				//row.Add(tile);
+				GameObject gobj = (GameObject)Instantiate(TilePrefab, new Vector3(i - Mathf.Floor(mapSize / 2), -j + Mathf.Floor(mapSize / 2), 0) + mapPosition, Quaternion.Euler(new Vector3()));
+				Tile tile = gobj.GetComponent<Tile>();
+				tile.gridPosition = new Vector2(i, j);
+				row.Add(tile);
+			}
+			map.Add(row);
+		}
+	}
+	void generatePlayer() {
+		userPlayers = new List<UserPlayer>();
+		aiPlayers = new List<AIPlayer> ();
+
+		AIPlayer aiplayer;
+		for (int i = 0; i < 3; i++) {
+			UserPlayer player;
+			GameObject gobj = (GameObject)Instantiate(UserPlayerPrefab, new Vector3(i - Mathf.Floor(mapSize / 2), -0 + Mathf.Floor(mapSize / 2), -100) + mapPosition, Quaternion.Euler(new Vector3()));
+			player = gobj.GetComponent<UserPlayer>();
+			player.setPlayerIndex (i);
+			userPlayers.Add (player);
+		}
+		currentPlayer = userPlayers [0];
+		for (int i = 0; i < 3; i++) {
+			GameObject gobj2 = (GameObject)Instantiate(AIPlayerPrefab, new Vector3(i, 0, -100) + mapPosition, Quaternion.Euler(new Vector3()));
+			aiplayer = gobj2.GetComponent<AIPlayer> ();
+			aiplayer.setPlayerIndex (i);
+			aiPlayers.Add(aiplayer);
+		}
+
+	}
+	public void enterBattleScene(){
+		Debug.Log ("Battle Start.");
+	}
+	/******************************************************/
+
+
+
 	/*************************************** For Board Stage End ***************************************/
 	/*************************************** For Board Stage End ***************************************/
 	/*************************************** For Board Stage End ***************************************/
@@ -163,7 +248,10 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+		instance = this;
 		initBattle ();
+		generateMap();
+		generatePlayer();
 	}
 	
 	// Update is called once per frame
@@ -256,10 +344,14 @@ public class GameManager : MonoBehaviour {
 						if (!playerNextMove.text.Equals ("dead")) {
 							setPlayerNext ("idle");
 							playerNextMove.text = "Winner!";
+						} else {
+							activePlayer.SetActive (false);
 						}
 						if (!enemyNextMove.text.Equals ("dead")) {
 							setEnemyNext ("idle");
 							enemyNextMove.text = "Winner!";
+						} else {
+							activeEnemy.SetActive (false);
 						}
 					} else {
 						resetRound ();
@@ -284,7 +376,12 @@ public class GameManager : MonoBehaviour {
 			battleCamera.SetActive (false);
 			outCamera.SetActive (true);
 
-
+			foreach(Player p in userPlayers){
+				p.TurnUpdate ();
+			}
+			foreach(Player p in aiPlayers){
+				p.TurnUpdate ();
+			}
 		}
 
 	}

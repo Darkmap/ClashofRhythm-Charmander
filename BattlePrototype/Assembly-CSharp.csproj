@@ -47,6 +47,10 @@
   <ItemGroup>
      <Compile Include="Assets\BattleManager.cs" />
      <Compile Include="Assets\GameManager.cs" />
+     <Compile Include="Assets\scripts\AIPlayer.cs" />
+     <Compile Include="Assets\scripts\Player.cs" />
+     <Compile Include="Assets\scripts\Tile.cs" />
+     <Compile Include="Assets\scripts\UserPlayer.cs" />
  <Reference Include="UnityEngine.Networking">
  <HintPath>/Applications/Unity/Unity.app/Contents/UnityExtensions/Unity/Networking/UnityEngine.Networking.dll</HintPath>
  </Reference>
