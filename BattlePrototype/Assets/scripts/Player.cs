@@ -2,6 +2,7 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
+	public GameObject itSelf;
     public Vector3 moveDestination;
 	public int playerIndex;
 	public int steps;
@@ -29,12 +30,11 @@ public class Player : MonoBehaviour {
 		if (this.GetType () != currentPlayer.GetType ()) {
 			Debug.Log (GameManager.mDistance (this.transform.position, currentPlayer.transform.position));
 			if (GameManager.mDistance (this.transform.position, currentPlayer.transform.position) == 1) {
-				GameManager.instance.enterBattleScene ();
+				GameManager.instance.enterBattleScene (currentPlayer, this);
 				return;
 			}
-		} else {
-			GameManager.instance.setCurrentPlayer (this);
-			//Debug.Log ("I'm player " + playerIndex + ".");
 		}
+		GameManager.instance.setCurrentPlayer (this);
+		//Debug.Log ("I'm player " + playerIndex + ".");
 	}
 }

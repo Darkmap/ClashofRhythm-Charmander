@@ -192,7 +192,7 @@ public class GameManager : MonoBehaviour {
 	public void moveCurrentPlayer(Tile destTile) {
 		Player p = currentPlayer;
 		if (mDistance(p.moveDestination, destTile.transform.position) <= 3){
-			p.moveDestination = destTile.transform.position;
+			p.moveDestination = destTile.transform.position + new Vector3(0,0,-1);
 		}
 	}
 
@@ -219,22 +219,25 @@ public class GameManager : MonoBehaviour {
 		AIPlayer aiplayer;
 		for (int i = 0; i < 3; i++) {
 			UserPlayer player;
-			GameObject gobj = (GameObject)Instantiate(UserPlayerPrefab, new Vector3(i - Mathf.Floor(mapSize / 2), -0 + Mathf.Floor(mapSize / 2), -100) + mapPosition, Quaternion.Euler(new Vector3()));
+			GameObject gobj = (GameObject)Instantiate(UserPlayerPrefab, new Vector3(i - Mathf.Floor(mapSize / 2), -0 + Mathf.Floor(mapSize / 2), -1) + mapPosition, Quaternion.Euler(new Vector3()));
 			player = gobj.GetComponent<UserPlayer>();
 			player.setPlayerIndex (i);
 			userPlayers.Add (player);
 		}
 		currentPlayer = userPlayers [0];
 		for (int i = 0; i < 3; i++) {
-			GameObject gobj2 = (GameObject)Instantiate(AIPlayerPrefab, new Vector3(i, 0, -100) + mapPosition, Quaternion.Euler(new Vector3()));
+			GameObject gobj2 = (GameObject)Instantiate(AIPlayerPrefab, new Vector3(i, 0, -1) + mapPosition, Quaternion.Euler(new Vector3()));
 			aiplayer = gobj2.GetComponent<AIPlayer> ();
 			aiplayer.setPlayerIndex (i);
 			aiPlayers.Add(aiplayer);
 		}
 
 	}
-	public void enterBattleScene(){
+	public void enterBattleScene(Player self, Player enemy){
 		Debug.Log ("Battle Start.");
+		battle = true;
+		activePlayer = self.gameObject;
+		activeEnemy = enemy.gameObject;
 	}
 	/******************************************************/
 
