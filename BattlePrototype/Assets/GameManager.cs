@@ -280,7 +280,7 @@ public class GameManager : MonoBehaviour {
 					int gen = Random.Range (1, 10);
 					if (gen < 5) {
 						enemyNextMoveStr = "attack";
-					} else if (gen < 9) {
+					} else if (gen < 7) {
 						enemyNextMoveStr = "dodge";
 					} else {
 						enemyNextMoveStr = "idle";
@@ -319,16 +319,16 @@ public class GameManager : MonoBehaviour {
 				} else {
 					if (!updatedHealth) {
 						if (playerNextMove.text.Equals ("attack") && enemyNextMove.text.Equals ("attack")) {
-							updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 1f));
-							updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 1f));
+							updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 0.5f));
+							updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 0.5f));
 						} else if (playerNextMove.text.Equals ("attack") && enemyNextMove.text.Equals ("dodge")) {
-							updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 0.1f));
+							updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 0.25f));
 						} else if (playerNextMove.text.Equals ("attack") && enemyNextMove.text.Equals ("idle")) {
-							updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 1f));
+							updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 0.5f));
 						} else if (playerNextMove.text.Equals ("dodge") && enemyNextMove.text.Equals ("attack")) {
-							updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 0.1f));
+							updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 0.25f));
 						} else if (playerNextMove.text.Equals ("idle") && enemyNextMove.text.Equals ("attack")) {
-							updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 1f));
+							updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 0.5f));
 						}
 						updatedHealth = true;
 					}
