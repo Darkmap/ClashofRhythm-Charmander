@@ -25,7 +25,7 @@ public class UserPlayer : Player {
                 transform.position = moveDestination;
 			}
 			animator.SetBool ("walk_down", true);
-		} else {
+		} else if (animator.GetBool("walk_down")) {
 			animator.SetBool ("walk_down", false);
 		}
     }
