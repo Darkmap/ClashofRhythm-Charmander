@@ -6,7 +6,9 @@ public class Player : MonoBehaviour {
     public Vector3 moveDestination;
 	public int playerIndex;
 	public int steps;
+	public bool moved;
     void Awake() {
+		moved = false;
         moveDestination = transform.position;
     }
 	// Use this for initialization
@@ -28,10 +30,13 @@ public class Player : MonoBehaviour {
 		Player currentPlayer = GameManager.instance.getCurrentPlayer ();
 		Debug.Log (this.GetType ());
 		if (this.GetType () != currentPlayer.GetType ()) {
-			Debug.Log (GameManager.mDistance (this.transform.position, currentPlayer.transform.position));
-			if (GameManager.mDistance (this.transform.position, currentPlayer.transform.position) == 1) {
+			if (GameManager.mDistance (this.transform.position, currentPlayer.transform.position) == 1 && !moved) {
+				this.moved = true;
 				GameManager.instance.enterBattleScene (currentPlayer, this);
 				return;
+			}
+			if (moved) {
+				Debug.Log ("This unit has been moved");
 			}
 		}
 		GameManager.instance.setCurrentPlayer (this);

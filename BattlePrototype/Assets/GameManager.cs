@@ -148,6 +148,7 @@ public class GameManager : MonoBehaviour {
 	/*************************************** For Board Stage Start ***************************************/
 	// Two stages:
 	public bool battle; // Board vs Battle
+	public int turn;
 	// Swiching between Stages
 	public GameObject battleCamera; 
 	public GameObject outCamera;
@@ -189,10 +190,53 @@ public class GameManager : MonoBehaviour {
 	public static int mDistance(Vector3 v1, Vector3 v2){
 		return (int)Math.Round(Math.Abs (v1 [0] - v2 [0]) + Math.Abs (v1 [1] - v2 [1]));
 	}
+	public void initTurn(){
+		turn = 0;
+	}
+	public bool isTurnOver(){
+		Player p = currentPlayer;
+		if (p.GetType () == typeof(UserPlayer)) {
+			foreach (UserPlayer unit in userPlayers) {
+				if (!unit.moved)
+					return false;
+			}
+			return true;
+		} else if (p.GetType () == typeof(AIPlayer)) {
+			foreach (AIPlayer unit in aiPlayers){
+				if (!unit.moved)
+					return false;
+			}
+			return true;
+		}
+		return true;
+	}
+	public void nextTurn(){
+		if (turn == 0) {
+			foreach (AIPlayer unit in aiPlayers) {
+				unit.moved = false;
+			}
+			turn = 1;
+			Debug.Log ("AI's turn start.");
+		} else if (turn == 1) {
+			foreach (UserPlayer unit in userPlayers) {
+				unit.moved = false;
+			}
+			turn = 0;
+			Debug.Log ("User's turn start.");
+		}
+	}
 	public void moveCurrentPlayer(Tile destTile) {
 		Player p = currentPlayer;
-		if (mDistance(p.moveDestination, destTile.transform.position) <= 3){
-			p.moveDestination = destTile.transform.position + new Vector3(0,0,-1);
+		if (!p.moved) {
+			if (mDistance (p.moveDestination, destTile.transform.position) <= 3) {
+				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, -1);
+				p.moved = true;
+				if (isTurnOver ()) {
+					nextTurn ();
+				}
+			}
+		} else {
+			Debug.Log ("This player has been moved.");
 		}
 	}
 
@@ -253,6 +297,7 @@ public class GameManager : MonoBehaviour {
 	void Awake () {
 		instance = this;
 		initBattle ();
+		initTurn ();
 		generateMap();
 		generatePlayer();
 	}
@@ -349,12 +394,14 @@ public class GameManager : MonoBehaviour {
 							playerNextMove.text = "Winner!";
 						} else {
 							activePlayer.SetActive (false);
+							userPlayers.Remove (activePlayer.GetComponent<UserPlayer>());
 						}
 						if (!enemyNextMove.text.Equals ("dead")) {
 							setEnemyNext ("idle");
 							enemyNextMove.text = "Winner!";
 						} else {
 							activeEnemy.SetActive (false);
+							aiPlayers.Remove(activeEnemy.GetComponent<AIPlayer> ());
 						}
 					} else {
 						resetRound ();
@@ -365,6 +412,9 @@ public class GameManager : MonoBehaviour {
 					endTime -= Time.deltaTime;
 				} else {
 					resetBattle ();
+					if (isTurnOver ()) {
+						nextTurn ();
+					}
 					battle = false;
 				}
 			}

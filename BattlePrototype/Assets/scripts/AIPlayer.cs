@@ -10,7 +10,7 @@ public class AIPlayer : Player {
 	
 	// Update is called once per frame
 	void Update () {
-	
+
 	}
 	public override void TurnUpdate() {
 		if (Vector3.Distance(moveDestination, transform.position) > 0.1f) { 
