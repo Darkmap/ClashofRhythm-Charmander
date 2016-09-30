@@ -2,10 +2,12 @@
 using System.Collections;
 
 public class UserPlayer : Player {
-    public float moveSpeed = 10.0f;
+
+	public Animator animator;
+	public float moveSpeed = 2f;
 	// Use this for initialization
 	void Start () {
-	
+		animator = this.gameObject.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -21,8 +23,10 @@ public class UserPlayer : Player {
             transform.position += (moveDestination - transform.position).normalized * Time.deltaTime * moveSpeed;
             if (Vector3.Distance(moveDestination, transform.position) <= 0.1f) {
                 transform.position = moveDestination;
-            }
-
-        }
+			}
+			animator.SetBool ("walk_down", true);
+		} else {
+			animator.SetBool ("walk_down", false);
+		}
     }
 }
