@@ -47,6 +47,12 @@
   <ItemGroup>
      <Compile Include="Assets\BattleManager.cs" />
      <Compile Include="Assets\GameManager.cs" />
+     <Compile Include="Assets\battle music\Main.cs" />
+     <Compile Include="Assets\battle music\MusicButton.cs" />
+     <Compile Include="Assets\battle music\Note.cs" />
+     <Compile Include="Assets\battle music\Sound.cs" />
+     <Compile Include="Assets\battle music\audio.cs" />
+     <Compile Include="Assets\battle music\test.cs" />
      <Compile Include="Assets\scripts\AIPlayer.cs" />
      <Compile Include="Assets\scripts\Player.cs" />
      <Compile Include="Assets\scripts\Tile.cs" />

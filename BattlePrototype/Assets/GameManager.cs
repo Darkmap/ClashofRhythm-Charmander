@@ -31,8 +31,8 @@ public class GameManager : MonoBehaviour {
 	public GameObject activeEnemy;
 
 	// Buttons
-	public Button leftButton;
-	public Button rightButton;
+//	public Button leftButton;
+//	public Button rightButton;
 
 	// Time progress
 	public Image progressBar;
@@ -60,17 +60,29 @@ public class GameManager : MonoBehaviour {
 	public bool end = false;
 	public float castingTime = 5f;
 
+	/**
+	 * 
+	 * 
+	 * */
+	public GameObject blue;
+	public GameObject green;
+	public GameObject red;
+	public GameObject yellow;
+
+	public AudioSource audio;
+	public int count = 30;
+
 	// Init everything when game start / restart
 	void initBattle() {
 		updateHealth (playerHealthBar, 1f);
-		leftButton.onClick.AddListener (delegate{
-			print("left");
-			inputKeySequence.Add(1);
-		});
-		rightButton.onClick.AddListener (delegate{
-			print("right");
-			inputKeySequence.Add(2);
-		});
+//		leftButton.onClick.AddListener (delegate{
+//			print("left");
+//			inputKeySequence.Add(1);
+//		});
+//		rightButton.onClick.AddListener (delegate{
+//			print("right");
+//			inputKeySequence.Add(2);
+//		});
 	}
 
 	void updateHealth(Image bar, float newValue) {
@@ -84,8 +96,8 @@ public class GameManager : MonoBehaviour {
 	}
 
 	void resetRound (){
-		leftButton.gameObject.SetActive (true);
-		rightButton.gameObject.SetActive (true);
+//		leftButton.gameObject.SetActive (true);
+//		rightButton.gameObject.SetActive (true);
 		setPlayerNext("idle");
 		setEnemyNext("idle");
 		playerNextMove.text = "";
@@ -99,7 +111,71 @@ public class GameManager : MonoBehaviour {
 		endTime = 5f;
 		castingTime = 5f;
 		inputKeySequence.Clear ();
+
+		//
+		audio.Play ();
+		/**
+		 * debug*/
+		Debug.Log ("reset");
+		this.count = 30;
+		this.InvokeRepeating("createBlue", 2.0f, 2.0f);
+		this.InvokeRepeating ("createGreen", 1.0f, 1.25f);
+		this.InvokeRepeating ("createRed", 1.25f,0.75f);
+		this.InvokeRepeating ("createYellow", 0.75f, 1.0f);
+
 	}
+
+
+
+	public void createBlue(){
+		if (count > 0) {
+			Instantiate (blue, transform.position + new Vector3 (-1.5f, -1.16f, -10), Quaternion.Euler (0, 0, 0));
+			count -= 1;
+
+		}
+		if (count <= 0) {
+			this.CancelInvoke ();
+			Invoke ("stop", 1.0f);
+		}
+	}
+
+	public void createGreen(){
+		if (count > 0) {
+			Instantiate (green, transform.position + new Vector3 (-1.5f, -3.2f, -10), Quaternion.Euler (0, 0, 0));
+		}
+		count -= 1;
+		if (count <= 0) {
+			this.CancelInvoke ();
+			Invoke ("stop", 1.0f);
+		}
+
+	}
+	public void createRed(){
+		if (count > 0) {
+			Instantiate (red, transform.position + new Vector3 (1.5f, -1.16f, -10), Quaternion.Euler (0, 0, 0));
+			count -= 1;
+		}
+		if (count <= 0) {
+			this.CancelInvoke ();
+			Invoke ("stop", 1.0f);
+		}
+	}
+
+	public void createYellow(){
+		if (count > 0) {
+			Instantiate (yellow, transform.position + new Vector3 (1.5f, -3.2f, 0), Quaternion.Euler (0, 0, 0));
+			count -= 1;
+		}
+		if (count <= 0) {
+			this.CancelInvoke ();
+			Invoke ("stop", 1.0f);
+		}
+	}
+
+	public void stop(){
+		audio.Stop();
+	}
+
 
 	void setPlayerNext(string name) {
 		if (name.Equals ("attack")) {
@@ -228,7 +304,7 @@ public class GameManager : MonoBehaviour {
 	public void moveCurrentPlayer(Tile destTile) {
 		Player p = currentPlayer;
 		if (!p.moved) {
-			if (mDistance (p.moveDestination, destTile.transform.position) <= 3) {
+			if (mDistance (p.moveDestination, destTile.transform.position) <= p.steps) {
 				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, -1);
 				p.moved = true;
 				if (isTurnOver ()) {
@@ -282,6 +358,16 @@ public class GameManager : MonoBehaviour {
 		battle = true;
 		activePlayer = self.gameObject;
 		activeEnemy = enemy.gameObject;
+
+		audio.Play ();
+		/**
+		 * debug*/
+		Debug.Log ("initial");
+		count = 30;
+		this.InvokeRepeating("createBlue", 2.0f, 2.0f);
+		this.InvokeRepeating ("createGreen", 1.0f, 1.25f);
+		this.InvokeRepeating ("createRed", 1.25f,0.75f);
+		this.InvokeRepeating ("createYellow", 0.75f, 1.0f);
 	}
 	/******************************************************/
 
@@ -318,6 +404,8 @@ public class GameManager : MonoBehaviour {
 			battleCamera.SetActive (true);
 			outCamera.SetActive (false);
 
+
+
 			// States Logic
 			if (inTimeWindow) {
 
@@ -340,8 +428,8 @@ public class GameManager : MonoBehaviour {
 					inTimeWindow = false;
 				}
 			} else if (!casting) {
-				leftButton.gameObject.SetActive (false);
-				rightButton.gameObject.SetActive (false);
+//				leftButton.gameObject.SetActive (false);
+//				rightButton.gameObject.SetActive (false);
 
 				string a = "";
 				foreach (int key in inputKeySequence) {
