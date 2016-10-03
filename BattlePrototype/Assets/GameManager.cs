@@ -424,7 +424,8 @@ public class GameManager : MonoBehaviour {
 
 				//Reduce fill amount over 30 seconds
 				if (progressBar.fillAmount > 0) {
-					progressBar.fillAmount -= 1.0f / waitTime * Time.deltaTime;
+//					progressBar.fillAmount -= 1.0f / waitTime * Time.deltaTime;
+					progressBar.fillAmount = 1.0f / 30 * count;
 				} else {
 					inTimeWindow = false;
 				}
