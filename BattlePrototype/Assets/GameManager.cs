@@ -336,7 +336,7 @@ public class GameManager : MonoBehaviour {
 		userPlayers = new List<UserPlayer>();
 		aiPlayers = new List<AIPlayer> ();
 
-		AIPlayer aiplayer;
+//		AIPlayer aiplayer;
 		for (int i = 0; i < 3; i++) {
 			UserPlayer player;
 			GameObject gobj = (GameObject)Instantiate(UserPlayerPrefab, new Vector3(i - Mathf.Floor(mapSize / 2), -0 + Mathf.Floor(mapSize / 2), -1) + mapPosition, Quaternion.Euler(new Vector3()));
@@ -346,6 +346,7 @@ public class GameManager : MonoBehaviour {
 		}
 		currentPlayer = userPlayers [0];
 		for (int i = 0; i < 3; i++) {
+			AIPlayer aiplayer;
 			GameObject gobj2 = (GameObject)Instantiate(AIPlayerPrefab, new Vector3(i, 0, -1) + mapPosition, Quaternion.Euler(new Vector3()));
 			aiplayer = gobj2.GetComponent<AIPlayer> ();
 			aiplayer.setPlayerIndex (i);

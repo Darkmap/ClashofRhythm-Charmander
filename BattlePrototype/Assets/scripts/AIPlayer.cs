@@ -2,10 +2,12 @@
 using System.Collections;
 
 public class AIPlayer : Player {
-	public float moveSpeed = 10.0f;
+
+	public Animator animator;
+	public float moveSpeed = 2f;
 	// Use this for initialization
 	void Start () {
-	
+		animator = this.gameObject.GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -18,7 +20,9 @@ public class AIPlayer : Player {
 			if (Vector3.Distance(moveDestination, transform.position) <= 0.1f) {
 				transform.position = moveDestination;
 			}
-
+			animator.SetBool ("walk_down", true);
+		} else if (animator.GetBool("walk_down")) {
+			animator.SetBool ("walk_down", false);
 		}
 	}
 }
