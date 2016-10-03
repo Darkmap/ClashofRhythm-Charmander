@@ -269,15 +269,23 @@ public class GameManager : MonoBehaviour {
 	public void initTurn(){
 		turn = 0;
 	}
+	public Type currentPlayerTurn(){
+		if (turn == 0) {
+			return typeof(UserPlayer);
+		} else
+			return typeof(AIPlayer);
+	}
 	public bool isTurnOver(){
-		Player p = currentPlayer;
-		if (p.GetType () == typeof(UserPlayer)) {
+		
+		if (currentPlayerTurn() == typeof(UserPlayer)) {
+			Debug.Log("User Player has " + userPlayers.Count+ "units");
 			foreach (UserPlayer unit in userPlayers) {
 				if (!unit.moved)
 					return false;
 			}
 			return true;
-		} else if (p.GetType () == typeof(AIPlayer)) {
+		} else if (currentPlayerTurn() == typeof(AIPlayer)) {
+			Debug.Log ("AI Player has " + aiPlayers.Count + "units");
 			foreach (AIPlayer unit in aiPlayers){
 				if (!unit.moved)
 					return false;
@@ -292,12 +300,14 @@ public class GameManager : MonoBehaviour {
 				unit.moved = false;
 			}
 			turn = 1;
+			currentPlayer = aiPlayers [0];
 			Debug.Log ("AI's turn start.");
 		} else if (turn == 1) {
 			foreach (UserPlayer unit in userPlayers) {
 				unit.moved = false;
 			}
 			turn = 0;
+			currentPlayer = userPlayers [0];
 			Debug.Log ("User's turn start.");
 		}
 	}
@@ -353,6 +363,27 @@ public class GameManager : MonoBehaviour {
 			aiPlayers.Add(aiplayer);
 		}
 
+	}
+	public bool removeFromPlayerList(GameObject obj){
+		Player p;
+		if (obj.GetComponent<UserPlayer> () != null) {
+			p = obj.GetComponent<UserPlayer> ();
+		} else {
+			p = obj.GetComponent<AIPlayer> ();
+		}
+		if (p.GetType () == typeof(UserPlayer)) {
+			if (userPlayers.Remove ((UserPlayer)p)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else if (p.GetType () == typeof(AIPlayer)) {
+			if (aiPlayers.Remove ((AIPlayer)p)) {
+				return true;
+			} else
+				return false;
+		}
+		return true;
 	}
 	public void enterBattleScene(Player self, Player enemy){
 		Debug.Log ("Battle Start.");
@@ -483,15 +514,17 @@ public class GameManager : MonoBehaviour {
 							setPlayerNext ("idle");
 							playerNextMove.text = "Winner!";
 						} else {
+							if (removeFromPlayerList (activePlayer)) {
+								Debug.Log ("Successfully removed");
+							}
 							activePlayer.SetActive (false);
-							userPlayers.Remove (activePlayer.GetComponent<UserPlayer>());
 						}
 						if (!enemyNextMove.text.Equals ("dead")) {
 							setEnemyNext ("idle");
 							enemyNextMove.text = "Winner!";
 						} else {
+							removeFromPlayerList (activeEnemy);
 							activeEnemy.SetActive (false);
-							aiPlayers.Remove(activeEnemy.GetComponent<AIPlayer> ());
 						}
 					} else {
 						resetRound ();
