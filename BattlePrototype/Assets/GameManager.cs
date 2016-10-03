@@ -392,6 +392,10 @@ public class GameManager : MonoBehaviour {
 		activeEnemy = enemy.gameObject;
 
 		audio.Play ();
+
+
+		resetBattle ();
+
 		/**
 		 * debug*/
 		Debug.Log ("initial");
@@ -534,7 +538,6 @@ public class GameManager : MonoBehaviour {
 				if (endTime > 0) {
 					endTime -= Time.deltaTime;
 				} else {
-					resetBattle ();
 					if (isTurnOver ()) {
 						nextTurn ();
 					}
