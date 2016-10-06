@@ -39,6 +39,7 @@ public class Player : MonoBehaviour {
 	void OnMouseDown(){
 		Player currentPlayer = GameManager.instance.getCurrentPlayer ();
 		Debug.Log (this.GetType ());
+		Debug.Log ("mouse down");
 		if (GameManager.instance.currentPlayerTurn () == this.GetType ()) {
 			if (moved) {
 				Debug.Log ("This unit has been moved");
