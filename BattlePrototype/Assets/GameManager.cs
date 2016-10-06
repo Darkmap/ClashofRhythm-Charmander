@@ -117,6 +117,7 @@ public class GameManager : MonoBehaviour {
 		/**
 		 * debug*/
 		Debug.Log ("reset");
+		Main.score = 0;
 		this.count = 30;
 		this.InvokeRepeating("createBlue", 2.0f, 2.0f);
 		this.InvokeRepeating ("createGreen", 1.0f, 1.25f);
@@ -208,6 +209,7 @@ public class GameManager : MonoBehaviour {
 			unit1Animator.SetBool ("dodge", false);
 			unit1Animator.SetBool ("dead", false);
 		}
+		enemyNextMove.text = name;
 	}
 	/*************************************** For Battle Stage End ***************************************/
 	/*************************************** For Battle Stage End ***************************************/
@@ -400,6 +402,9 @@ public class GameManager : MonoBehaviour {
 		 * debug*/
 		Debug.Log ("initial");
 		count = 30;
+
+		Main.score = 0;
+
 		this.InvokeRepeating("createBlue", 2.0f, 2.0f);
 		this.InvokeRepeating ("createGreen", 1.0f, 1.25f);
 		this.InvokeRepeating ("createRed", 1.25f,0.75f);
@@ -454,7 +459,7 @@ public class GameManager : MonoBehaviour {
 					} else {
 						enemyNextMoveStr = "idle";
 					}
-					enemyNextMove.text = enemyNextMoveStr;
+//					enemyNextMove.text = enemyNextMoveStr;
 				}
 
 				//Reduce fill amount over 30 seconds
@@ -468,21 +473,25 @@ public class GameManager : MonoBehaviour {
 //				leftButton.gameObject.SetActive (false);
 //				rightButton.gameObject.SetActive (false);
 
-				string a = "";
-				foreach (int key in inputKeySequence) {
-					a += key;
-				}
-				if (a.Equals ("1122")) {
-					casting = true;
+				Debug.Log ("Score: " + Main.score);
+
+				if (Main.score >= 500) {
+					enemyNextMoveStr = "idle";
+					setEnemyNext (enemyNextMoveStr);
 					setPlayerNext ("attack");
-				} else if (a.Equals ("2211")) {
-					casting = true;
-					setPlayerNext ("dodge");
+				} else if (Main.score >= 300) {
+					if (enemyNextMoveStr.Equals ("attack")) {
+						setPlayerNext ("dodge");
+					} else {
+						setPlayerNext ("attack");
+					}
+					setEnemyNext (enemyNextMoveStr);
 				} else {
-					casting = true;
+					enemyNextMoveStr = "attack";
+					setEnemyNext (enemyNextMoveStr);
 					setPlayerNext ("idle");
 				}
-				setEnemyNext (enemyNextMoveStr);
+				casting = true;
 			} else if (!end && casting) {
 				if (castingTime > 0) {
 					castingTime -= Time.deltaTime;
