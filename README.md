@@ -1,5 +1,5 @@
 # ClashofRhythm-Charmander
-Repo for team 'Charmander' of USC_CS526_16Fall.
+Repo for team 'Charmander' of USC_CS526_16Fall.The project is ongoing. Now the code is under branch Prototype.
 #1.	Premise
 Clash of Rhythm is a strategy game with music game elements on mobile platforms (i.e., iOS, Android). The player must conduct tactical movements of characters (units) across grid-based game maps to achieve the final goal.  When the enemy enter into the striking range of characters, the player can manipulate units to attack against the enemy. During the attacking process, the player must follow the rhythm of music to tap different places of the screen to maximize the attack effect or dodge effect. Once the character is defeated, it will be removed from the game scene.
 
