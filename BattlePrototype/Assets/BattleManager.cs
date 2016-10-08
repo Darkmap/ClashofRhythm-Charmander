@@ -1,19 +1,22 @@
 ﻿using UnityEngine;
-using System.Collections;
 using UnityEngine.UI;
+using System.Collections;
+using System.Collections.Generic;
+using System;
 using Random = UnityEngine.Random;
 
 public class BattleManager : MonoBehaviour {
 
+	public static BattleManager instance;
+	public static BattleManager getInstance() {
+		if (instance == null) {
+			instance = new BattleManager ();
+		}
+		return instance;
+	}
 
-	// Swiching between Scences
-	public GameObject battleCamera; 
-	public GameObject outCamera;
-	public GameObject battleUI;
-
-	// Buttons
-	public Button leftButton;
-	public Button rightButton;
+	public GameObject userPrefab;
+	public GameObject enemyPrefab;
 
 	// Time progress
 	public Image progressBar;
@@ -35,168 +38,178 @@ public class BattleManager : MonoBehaviour {
 	public Text enemyNextMove;
 	string enemyNextMoveStr = "";
 
-	// Process control
-	public ArrayList inputKeySequence = new ArrayList();
-	public bool casting = false;
-	public bool end = false;
-	public float castingTime = 5f;
+
+	public Vector3 playerLocation = new Vector3(-4f, 0f, 0f);
+	public Vector3 enemyLocation = new Vector3(4f, 0f, 0f);
+
+	GameObject userObj;
+	GameObject enemyObj;
+
+	Animator userAnimator;
+	Animator enemyAnimator;
+
+//	public BattleManager() {
+//	
+//	}
+
+//	public BattleManager(GameObject userPrefab, GameObject enermyPrefab) {
+//		
+//	}
+
+	public bool move_forward = false;
+	bool reverse = false;
+	bool move_back = false;
+
+
+
 
 	// Use this for initialization
 	void Start () {
-		updateHealth (playerHealthBar, 1f);
-		leftButton.onClick.AddListener (delegate{
-			print("left");
-			inputKeySequence.Add(1);
-		});
-		rightButton.onClick.AddListener (delegate{
-			print("right");
-			inputKeySequence.Add(2);
-		});
+		userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
+		userObj.transform.localScale += new Vector3(1f,1f,1f);
+		Rigidbody userRb = userObj.GetComponent<Rigidbody>();
+		userAnimator = userObj.GetComponent<Animator>();
+		userRb.isKinematic = false;
+
+		enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
+		enemyObj.transform.localScale += new Vector3(1f,1f,1f);
+		Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
+		enemyAnimator = enemyObj.GetComponent<Animator>();
+		enemyRb.isKinematic = false;
 	}
 
-	void Init() {
-		leftButton.gameObject.SetActive (true);
-		rightButton.gameObject.SetActive (true);
-		setPlayerNext("idle");
-		setEnemyNext("idle");
-		playerNextMove.text = "";
-		enemyNextMove.text = "";
-		enemyNextMoveStr = "";
-		casting = false;
-		inTimeWindow = true;
-		updatedHealth = false;
-		progressBar.fillAmount = 1;
-		endTime = 5f;
-		castingTime = 5f;
-		inputKeySequence.Clear ();
-	}
 
-	void setPlayerNext(string name) {
-		if (name.Equals ("attack")) {
-			unit0Animator.SetBool ("attack", true);
-			unit0Animator.SetBool ("dodge", false);
-		} else if (name.Equals ("dodge")) {
-			unit0Animator.SetBool ("attack", false);
-			unit0Animator.SetBool ("dodge", true);
+	bool moveUserForward() {
+		Vector3 moveDestination = new Vector3 (-1f, 0f, 0f);
+
+		if (Math.Abs (moveDestination.x - userObj.transform.position.x) > 0.1f) {
+			userObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
+			if (!userAnimator.GetBool ("walk_down")) {
+				userAnimator.SetBool ("walk_down", true);
+			}
+			return true;
+		} else if (userAnimator.GetBool ("walk_down")) {
+			userAnimator.SetBool ("walk_down", false);
+			userAttack ();
+			return false;
 		} else {
-			unit0Animator.SetBool ("attack", false);
-			unit0Animator.SetBool ("dodge", false);
-		}
-		playerNextMove.text = name;
-	}
-
-	void updateHealth(Image bar, float newValue) {
-		bar.fillAmount = newValue;
-	}
-
-	void setEnemyNext(string name) {
-		if (name.Equals ("attack")) {
-			unit1Animator.SetBool ("attack", true);
-			unit1Animator.SetBool ("dodge", false);
-		} else if (name.Equals ("dodge")) {
-			unit1Animator.SetBool ("attack", false);
-			unit1Animator.SetBool ("dodge", true);
-		} else {
-			unit1Animator.SetBool ("attack", false);
-			unit1Animator.SetBool ("dodge", false);
+			return false;
 		}
 	}
+
+	bool moveUserBack() {
+		Vector3 moveDestination = playerLocation;
+
+		if (Math.Abs (moveDestination.x - userObj.transform.position.x) > 0.1f) {
+			userObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
+			if (!userAnimator.GetBool ("walk_down")) {
+				userAnimator.SetBool ("walk_down", true);
+			}
+			return true;
+		} else if (userAnimator.GetBool ("walk_down")) {
+			userAnimator.SetBool ("walk_down", false);
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	void userAttack() {
+		userAnimator.SetBool ("attack", true);
+	}
+
+	void userReverse() {
+		userObj.transform.localRotation = Quaternion.Euler(0, 180, 0);
+	}
+
+	bool moveEnemyForward() {
+		Vector3 moveDestination = new Vector3 (1f, 0f, 0f);
+		if (Math.Abs (moveDestination.x - enemyObj.transform.position.x) > 0.1f) {
+			enemyObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
+			if (!enemyAnimator.GetBool ("walk_down")) {
+				enemyAnimator.SetBool ("walk_down", true);
+			}
+			return true;
+		} else if (enemyAnimator.GetBool ("walk_down")) {
+			enemyAnimator.SetBool ("walk_down", false);
+			enemyAttack ();
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	bool moveEnemyBack() {
+		Vector3 moveDestination = enemyLocation;
+		if (Math.Abs (moveDestination.x - enemyObj.transform.position.x) > 0.1f) {
+			enemyObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
+			if (!enemyAnimator.GetBool ("walk_down")) {
+				enemyAnimator.SetBool ("walk_down", true);
+			}
+			return true;
+		} else if (enemyAnimator.GetBool ("walk_down")) {
+			enemyAnimator.SetBool ("walk_down", false);
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	void enemyAttack() {
+		enemyAnimator.SetBool ("attack", true);
+	}
+
+	void enemyReverse() {
+		enemyObj.transform.localRotation = Quaternion.Euler(0, 0, 0);
+	}
+
+	void setMoveBack() {
+		userReverse ();
+		enemyReverse ();
+		move_back = true;
+	}
+
+	void hurt() {
+		userAnimator.SetBool ("hurt", true);
+		enemyAnimator.SetBool ("hurt", true);
+	}
+
+	void rotationRestore() {
+		userObj.transform.localRotation = Quaternion.Euler(0, 0, 0);
+		enemyObj.transform.localRotation = Quaternion.Euler(0, 180, 0);
+	}
+
+	void attack_round() {
+		if (!move_forward && !reverse && !move_back) {
+//			move_forward = true;
+		} else {
+			if (move_forward) {
+				bool user = moveUserForward ();
+				bool enemy = moveEnemyForward ();
+
+				if (!user && !enemy) {
+					move_forward = false;
+					reverse = true;
+				}
+			} else if (reverse) {
+				Invoke ("hurt", 0.5f);
+				Invoke ("setMoveBack", 1);
+				reverse = false;
+			} else if(move_back){
+				bool user = moveUserBack ();
+				bool enemy = moveEnemyBack ();
+				if (!user && !enemy) {
+					Invoke ("rotationRestore", 0.5f);
+					move_back = false;
+				}
+			}
+		}
+	}
+
 
 	// Update is called once per frame
-	void Update () 
-	{
+	void Update () {
 
-//		battleUI.gameObject.SetActive(false);
-		if (inTimeWindow) {
-
-			if (enemyNextMoveStr.Length == 0) {
-				int gen = Random.Range (1, 10);
-				if (gen < 5) {
-					enemyNextMoveStr = "attack";
-				} else if (gen < 9) {
-					enemyNextMoveStr = "dodge";
-				} else {
-					enemyNextMoveStr = "idle";
-				}
-				enemyNextMove.text = enemyNextMoveStr;
-			}
-
-			//Reduce fill amount over 30 seconds
-			if (progressBar.fillAmount > 0) {
-				progressBar.fillAmount -= 1.0f / waitTime * Time.deltaTime;
-			} else {
-				inTimeWindow = false;
-			}
-		} else if (!casting) {
-			leftButton.gameObject.SetActive (false);
-			rightButton.gameObject.SetActive (false);
-
-			string a = "";
-			foreach (int key in inputKeySequence) {
-				a += key;
-			}
-			if (a.Equals ("1122")) {
-				casting = true;
-				setPlayerNext ("attack");
-			} else if (a.Equals ("2211")) {
-				casting = true;
-				setPlayerNext ("dodge");
-			} else {
-				casting = true;
-				setPlayerNext ("idle");
-			}
-			setEnemyNext (enemyNextMoveStr);
-		} else if (!end && casting) {
-			if (castingTime > 0) {
-				castingTime -= Time.deltaTime;
-			} else {
-				if (!updatedHealth) {
-					if (playerNextMove.text.Equals ("attack") && enemyNextMove.text.Equals ("attack")) {
-						updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 0.5f));
-						updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 0.5f));
-					} else if (playerNextMove.text.Equals ("attack") && enemyNextMove.text.Equals ("dodge")) {
-						updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 0.1f));
-					} else if (playerNextMove.text.Equals ("attack") && enemyNextMove.text.Equals ("idle")) {
-						updateHealth (enemyHealthBar, System.Math.Max (0, enemyHealthBar.fillAmount - 0.5f));
-					} else if (playerNextMove.text.Equals ("dodge") && enemyNextMove.text.Equals ("attack")) {
-						updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 0.1f));
-					} else if (playerNextMove.text.Equals ("idle") && enemyNextMove.text.Equals ("attack")) {
-						updateHealth (playerHealthBar, System.Math.Max (0, playerHealthBar.fillAmount - 0.5f));
-					}
-					updatedHealth = true;
-				}
-
-				if (playerHealthBar.fillAmount == 0) {
-					unit0Animator.SetBool ("dead", true);
-					playerNextMove.text = "dead";
-					end = true;
-				}
-				if (enemyHealthBar.fillAmount == 0) {
-					unit1Animator.SetBool ("dead", true);
-					enemyNextMove.text = "dead";
-					end = true;
-				}
-				if (end) {
-					if (!playerNextMove.text.Equals ("dead")) {
-						setPlayerNext ("idle");
-						playerNextMove.text = "Winner!";
-					}
-					if (!enemyNextMove.text.Equals ("dead")) {
-						setEnemyNext ("idle");
-						enemyNextMove.text = "Winner!";
-					}
-				} else {
-					Init ();
-				}
-			}
-		} else if (end) {
-			if (endTime > 0) {
-				endTime -= Time.deltaTime;
-			} else {
-				battleUI.gameObject.SetActive(false);
-				battleCamera.SetActive (false);
-				outCamera.SetActive (true);
-			}
-		}
+		attack_round ();
 	}
 }
