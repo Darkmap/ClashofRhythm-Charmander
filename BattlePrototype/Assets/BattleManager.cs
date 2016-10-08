@@ -16,7 +16,7 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	public GameObject userPrefab;
-	public GameObject enermyPrefab;
+	public GameObject enemyPrefab;
 
 	// Time progress
 	public Image progressBar;
@@ -39,6 +39,9 @@ public class BattleManager : MonoBehaviour {
 	string enemyNextMoveStr = "";
 
 
+	public Vector3 playerLocation = new Vector3(-4f, -2.3f, 0f);
+	public Vector3 enemyLocation = new Vector3(4f, -2.3f, 0f);
+
 //	public BattleManager() {
 //	
 //	}
@@ -50,10 +53,13 @@ public class BattleManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		
-		GameObject userObj = (GameObject)Instantiate(userPrefab, new Vector3(-4f, -2.3f, 0f), Quaternion.Euler(new Vector3()));
-//		GameObject enemyObj = (GameObject)Instantiate(enermyPrefab, new Vector3(i - Mathf.Floor(mapSize / 2), -0 + Mathf.Floor(mapSize / 2), -1) + mapPosition, Quaternion.Euler(new Vector3()));
+		GameObject userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
+		Rigidbody userRb = userObj.GetComponent<Rigidbody>();
+		userRb.isKinematic = false;
 
+		GameObject enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
+		Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
+		enemyRb.isKinematic = false;
 	}
 	
 	// Update is called once per frame
