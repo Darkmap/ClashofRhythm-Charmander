@@ -39,8 +39,8 @@ public class BattleManager : MonoBehaviour {
 	string enemyNextMoveStr = "";
 
 
-	public Vector3 playerLocation = new Vector3(-4f, -2.3f, 0f);
-	public Vector3 enemyLocation = new Vector3(4f, -2.3f, 0f);
+	public Vector3 playerLocation = new Vector3(-4f, 0f, 0f);
+	public Vector3 enemyLocation = new Vector3(4f, 0f, 0f);
 
 	GameObject userObj;
 	GameObject enemyObj;
@@ -56,7 +56,7 @@ public class BattleManager : MonoBehaviour {
 //		
 //	}
 
-	bool move_forward = false;
+	public bool move_forward = false;
 	bool reverse = false;
 	bool move_back = false;
 
@@ -66,11 +66,13 @@ public class BattleManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
+		userObj.transform.localScale += new Vector3(1f,1f,1f);
 		Rigidbody userRb = userObj.GetComponent<Rigidbody>();
 		userAnimator = userObj.GetComponent<Animator>();
 		userRb.isKinematic = false;
 
 		enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
+		enemyObj.transform.localScale += new Vector3(1f,1f,1f);
 		Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
 		enemyAnimator = enemyObj.GetComponent<Animator>();
 		enemyRb.isKinematic = false;
@@ -78,7 +80,7 @@ public class BattleManager : MonoBehaviour {
 
 
 	bool moveUserForward() {
-		Vector3 moveDestination = new Vector3 (-0.5f, 0f, 0f);
+		Vector3 moveDestination = new Vector3 (-1f, 0f, 0f);
 
 		if (Math.Abs (moveDestination.x - userObj.transform.position.x) > 0.1f) {
 			userObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
@@ -106,7 +108,6 @@ public class BattleManager : MonoBehaviour {
 			return true;
 		} else if (userAnimator.GetBool ("walk_down")) {
 			userAnimator.SetBool ("walk_down", false);
-			userObj.transform.localRotation = Quaternion.Euler (0, 0, 0);
 			return false;
 		} else {
 			return false;
@@ -122,7 +123,7 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	bool moveEnemyForward() {
-		Vector3 moveDestination = new Vector3 (0.5f, 0f, 0f);
+		Vector3 moveDestination = new Vector3 (1f, 0f, 0f);
 		if (Math.Abs (moveDestination.x - enemyObj.transform.position.x) > 0.1f) {
 			enemyObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
 			if (!enemyAnimator.GetBool ("walk_down")) {
@@ -148,7 +149,6 @@ public class BattleManager : MonoBehaviour {
 			return true;
 		} else if (enemyAnimator.GetBool ("walk_down")) {
 			enemyAnimator.SetBool ("walk_down", false);
-			enemyObj.transform.localRotation = Quaternion.Euler(0, 180, 0);
 			return false;
 		} else {
 			return false;
@@ -166,32 +166,40 @@ public class BattleManager : MonoBehaviour {
 	void setMoveBack() {
 		userReverse ();
 		enemyReverse ();
-		reverse = false;
 		move_back = true;
+	}
+
+	void hurt() {
+		userAnimator.SetBool ("hurt", true);
+		enemyAnimator.SetBool ("hurt", true);
+	}
+
+	void rotationRestore() {
+		userObj.transform.localRotation = Quaternion.Euler(0, 0, 0);
+		enemyObj.transform.localRotation = Quaternion.Euler(0, 180, 0);
 	}
 
 	void attack_round() {
 		if (!move_forward && !reverse && !move_back) {
-			move_forward = true;
+//			move_forward = true;
 		} else {
 			if (move_forward) {
 				bool user = moveUserForward ();
 				bool enemy = moveEnemyForward ();
-
-				//				print ("user = " + user);
-				//				print ("enemy = " + enemy);
 
 				if (!user && !enemy) {
 					move_forward = false;
 					reverse = true;
 				}
 			} else if (reverse) {
+				Invoke ("hurt", 0.5f);
 				Invoke ("setMoveBack", 1);
+				reverse = false;
 			} else if(move_back){
 				bool user = moveUserBack ();
 				bool enemy = moveEnemyBack ();
-
 				if (!user && !enemy) {
+					Invoke ("rotationRestore", 0.5f);
 					move_back = false;
 				}
 			}
