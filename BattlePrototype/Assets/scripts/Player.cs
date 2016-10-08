@@ -8,6 +8,7 @@ public class Player : MonoBehaviour {
 	public int playerIndex;
 	public int steps;
 	public bool moved;
+	public int unitClass= 0;
     void Awake() {
 		moved = false;
         moveDestination = transform.position;
@@ -54,28 +55,5 @@ public class Player : MonoBehaviour {
 			}
 			Debug.Log ("Not your turn.");
 		}
-//		if (!currentPlayer.moved) {
-//			if (this.GetType () != currentPlayer.GetType ()) {
-//				if (GameManager.mDistance (this.transform.position, currentPlayer.transform.position) == 1 && !currentPlayer.moved) {
-//					currentPlayer.moved = true;
-//					GameManager.instance.enterBattleScene (currentPlayer, this);
-//				} else {
-//					Debug.Log ("Not your turn.");
-//				}
-//			} else {
-//				GameManager.instance.setCurrentPlayer (this);
-//			}
-//		}else {
-//			if (this.GetType () == currentPlayer.GetType ()) {
-//				if (moved) {
-//					Debug.Log ("This unit has been moved");
-//				} else {
-//					GameManager.instance.setCurrentPlayer (this);
-//				}
-//			} else {
-//				Debug.Log ("Not your turn.");
-//			}
-//
-//		}
 	}
 }
