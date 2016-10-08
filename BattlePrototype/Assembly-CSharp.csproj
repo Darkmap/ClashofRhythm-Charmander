@@ -57,7 +57,6 @@
      <Compile Include="Assets\scripts\Player.cs" />
      <Compile Include="Assets\scripts\Tile.cs" />
      <Compile Include="Assets\scripts\UserPlayer.cs" />
-     <None Include="Assets\texture\Atlas\Attribution.txt" />
      <None Include="Assets\ActRPGsprites\readme.txt" />
      <None Include="Assets\material\Outlined-Silhouette Only.shader" />
  <Reference Include="UnityEngine.Networking">
