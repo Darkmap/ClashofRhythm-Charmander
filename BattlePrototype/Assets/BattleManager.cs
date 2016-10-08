@@ -42,6 +42,12 @@ public class BattleManager : MonoBehaviour {
 	public Vector3 playerLocation = new Vector3(-4f, -2.3f, 0f);
 	public Vector3 enemyLocation = new Vector3(4f, -2.3f, 0f);
 
+	GameObject userObj;
+	GameObject enemyObj;
+
+	Animator userAnimator;
+	Animator enemyAnimator;
+
 //	public BattleManager() {
 //	
 //	}
@@ -50,20 +56,152 @@ public class BattleManager : MonoBehaviour {
 //		
 //	}
 
+	bool move_forward = false;
+	bool reverse = false;
+	bool move_back = false;
+
+
+
 
 	// Use this for initialization
 	void Start () {
-		GameObject userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
+		userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
 		Rigidbody userRb = userObj.GetComponent<Rigidbody>();
+		userAnimator = userObj.GetComponent<Animator>();
 		userRb.isKinematic = false;
 
-		GameObject enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
+		enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
 		Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
+		enemyAnimator = enemyObj.GetComponent<Animator>();
 		enemyRb.isKinematic = false;
 	}
-	
+
+
+	bool moveUserForward() {
+		Vector3 moveDestination = new Vector3 (-0.5f, 0f, 0f);
+
+		if (Math.Abs (moveDestination.x - userObj.transform.position.x) > 0.1f) {
+			userObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
+			if (!userAnimator.GetBool ("walk_down")) {
+				userAnimator.SetBool ("walk_down", true);
+			}
+			return true;
+		} else if (userAnimator.GetBool ("walk_down")) {
+			userAnimator.SetBool ("walk_down", false);
+			userAttack ();
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	bool moveUserBack() {
+		Vector3 moveDestination = playerLocation;
+
+		if (Math.Abs (moveDestination.x - userObj.transform.position.x) > 0.1f) {
+			userObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
+			if (!userAnimator.GetBool ("walk_down")) {
+				userAnimator.SetBool ("walk_down", true);
+			}
+			return true;
+		} else if (userAnimator.GetBool ("walk_down")) {
+			userAnimator.SetBool ("walk_down", false);
+			userObj.transform.localRotation = Quaternion.Euler (0, 0, 0);
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	void userAttack() {
+		userAnimator.SetBool ("attack", true);
+	}
+
+	void userReverse() {
+		userObj.transform.localRotation = Quaternion.Euler(0, 180, 0);
+	}
+
+	bool moveEnemyForward() {
+		Vector3 moveDestination = new Vector3 (0.5f, 0f, 0f);
+		if (Math.Abs (moveDestination.x - enemyObj.transform.position.x) > 0.1f) {
+			enemyObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
+			if (!enemyAnimator.GetBool ("walk_down")) {
+				enemyAnimator.SetBool ("walk_down", true);
+			}
+			return true;
+		} else if (enemyAnimator.GetBool ("walk_down")) {
+			enemyAnimator.SetBool ("walk_down", false);
+			enemyAttack ();
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	bool moveEnemyBack() {
+		Vector3 moveDestination = enemyLocation;
+		if (Math.Abs (moveDestination.x - enemyObj.transform.position.x) > 0.1f) {
+			enemyObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
+			if (!enemyAnimator.GetBool ("walk_down")) {
+				enemyAnimator.SetBool ("walk_down", true);
+			}
+			return true;
+		} else if (enemyAnimator.GetBool ("walk_down")) {
+			enemyAnimator.SetBool ("walk_down", false);
+			enemyObj.transform.localRotation = Quaternion.Euler(0, 180, 0);
+			return false;
+		} else {
+			return false;
+		}
+	}
+
+	void enemyAttack() {
+		enemyAnimator.SetBool ("attack", true);
+	}
+
+	void enemyReverse() {
+		enemyObj.transform.localRotation = Quaternion.Euler(0, 0, 0);
+	}
+
+	void setMoveBack() {
+		userReverse ();
+		enemyReverse ();
+		reverse = false;
+		move_back = true;
+	}
+
+	void attack_round() {
+		if (!move_forward && !reverse && !move_back) {
+			move_forward = true;
+		} else {
+			if (move_forward) {
+				bool user = moveUserForward ();
+				bool enemy = moveEnemyForward ();
+
+				//				print ("user = " + user);
+				//				print ("enemy = " + enemy);
+
+				if (!user && !enemy) {
+					move_forward = false;
+					reverse = true;
+				}
+			} else if (reverse) {
+				Invoke ("setMoveBack", 1);
+			} else if(move_back){
+				bool user = moveUserBack ();
+				bool enemy = moveEnemyBack ();
+
+				if (!user && !enemy) {
+					move_back = false;
+				}
+			}
+		}
+	}
+
+
 	// Update is called once per frame
 	void Update () {
-	
+
+		attack_round ();
 	}
 }

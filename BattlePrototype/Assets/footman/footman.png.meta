@@ -1,39 +1,39 @@
 fileFormatVersion: 2
-guid: 05e7f110d1336488b86dbc75a2980af8
-timeCreated: 1475796556
+guid: 424aabe501d3247ba9e913c3d9e972f0
+timeCreated: 1475915796
 licenseType: Free
 TextureImporter:
   fileIDToRecycleName:
-    21300000: Ye_Oldy_Spike_Guy_0
-    21300002: Ye_Oldy_Spike_Guy_1
-    21300004: Ye_Oldy_Spike_Guy_2
-    21300006: Ye_Oldy_Spike_Guy_3
-    21300008: Ye_Oldy_Spike_Guy_4
-    21300010: Ye_Oldy_Spike_Guy_5
-    21300012: Ye_Oldy_Spike_Guy_6
-    21300014: Ye_Oldy_Spike_Guy_7
-    21300016: Ye_Oldy_Spike_Guy_8
-    21300018: Ye_Oldy_Spike_Guy_9
-    21300020: Ye_Oldy_Spike_Guy_10
-    21300022: Ye_Oldy_Spike_Guy_11
-    21300024: Ye_Oldy_Spike_Guy_12
-    21300026: Ye_Oldy_Spike_Guy_13
-    21300028: Ye_Oldy_Spike_Guy_14
-    21300030: Ye_Oldy_Spike_Guy_15
-    21300032: Ye_Oldy_Spike_Guy_16
-    21300034: Ye_Oldy_Spike_Guy_17
-    21300036: Ye_Oldy_Spike_Guy_18
-    21300038: Ye_Oldy_Spike_Guy_19
-    21300040: Ye_Oldy_Spike_Guy_20
-    21300042: Ye_Oldy_Spike_Guy_21
-    21300044: Ye_Oldy_Spike_Guy_22
-    21300046: Ye_Oldy_Spike_Guy_23
-    21300048: Ye_Oldy_Spike_Guy_24
-    21300050: Ye_Oldy_Spike_Guy_25
-    21300052: Ye_Oldy_Spike_Guy_26
-    21300054: Ye_Oldy_Spike_Guy_27
-    21300056: Ye_Oldy_Spike_Guy_28
-    21300058: Ye_Oldy_Spike_Guy_29
+    21300000: footman_0
+    21300002: footman_1
+    21300004: footman_2
+    21300006: footman_3
+    21300008: footman_4
+    21300010: footman_5
+    21300012: footman_6
+    21300014: footman_7
+    21300016: footman_8
+    21300018: footman_9
+    21300020: footman_10
+    21300022: footman_11
+    21300024: footman_12
+    21300026: footman_13
+    21300028: footman_14
+    21300030: footman_15
+    21300032: footman_16
+    21300034: footman_17
+    21300036: footman_18
+    21300038: footman_19
+    21300040: footman_20
+    21300042: footman_21
+    21300044: footman_22
+    21300046: footman_23
+    21300048: footman_24
+    21300050: footman_25
+    21300052: footman_26
+    21300054: footman_27
+    21300056: footman_28
+    21300058: footman_29
   serializedVersion: 2
   mipmaps:
     mipMapMode: 0
@@ -83,20 +83,20 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_0
+      name: footman_0
       rect:
         serializedVersion: 2
         x: 9
         y: 118
         width: 12
-        height: 22
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_1
+      name: footman_1
       rect:
         serializedVersion: 2
         x: 30
@@ -104,12 +104,12 @@ TextureImporter:
         width: 12
         height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_2
+      name: footman_2
       rect:
         serializedVersion: 2
         x: 51
@@ -117,12 +117,12 @@ TextureImporter:
         width: 12
         height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_3
+      name: footman_3
       rect:
         serializedVersion: 2
         x: 70
@@ -135,7 +135,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_4
+      name: footman_4
       rect:
         serializedVersion: 2
         x: 89
@@ -148,7 +148,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_5
+      name: footman_5
       rect:
         serializedVersion: 2
         x: 108
@@ -161,7 +161,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_6
+      name: footman_6
       rect:
         serializedVersion: 2
         x: 7
@@ -174,7 +174,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_7
+      name: footman_7
       rect:
         serializedVersion: 2
         x: 35
@@ -187,7 +187,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_8
+      name: footman_8
       rect:
         serializedVersion: 2
         x: 62
@@ -200,7 +200,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_9
+      name: footman_9
       rect:
         serializedVersion: 2
         x: 90
@@ -213,7 +213,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_10
+      name: footman_10
       rect:
         serializedVersion: 2
         x: 119
@@ -226,7 +226,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_11
+      name: footman_11
       rect:
         serializedVersion: 2
         x: 146
@@ -239,7 +239,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_12
+      name: footman_12
       rect:
         serializedVersion: 2
         x: 9
@@ -252,7 +252,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_13
+      name: footman_13
       rect:
         serializedVersion: 2
         x: 30
@@ -265,7 +265,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_14
+      name: footman_14
       rect:
         serializedVersion: 2
         x: 51
@@ -278,7 +278,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_15
+      name: footman_15
       rect:
         serializedVersion: 2
         x: 70
@@ -291,7 +291,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_16
+      name: footman_16
       rect:
         serializedVersion: 2
         x: 91
@@ -304,7 +304,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_17
+      name: footman_17
       rect:
         serializedVersion: 2
         x: 111
@@ -317,7 +317,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_18
+      name: footman_18
       rect:
         serializedVersion: 2
         x: 7
@@ -330,7 +330,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_19
+      name: footman_19
       rect:
         serializedVersion: 2
         x: 30
@@ -343,7 +343,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_20
+      name: footman_20
       rect:
         serializedVersion: 2
         x: 51
@@ -356,7 +356,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_21
+      name: footman_21
       rect:
         serializedVersion: 2
         x: 69
@@ -369,7 +369,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_22
+      name: footman_22
       rect:
         serializedVersion: 2
         x: 90
@@ -382,7 +382,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_23
+      name: footman_23
       rect:
         serializedVersion: 2
         x: 108
@@ -395,7 +395,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_24
+      name: footman_24
       rect:
         serializedVersion: 2
         x: 7
@@ -408,46 +408,46 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_25
+      name: footman_25
       rect:
         serializedVersion: 2
-        x: 25
-        y: 26
-        width: 24
-        height: 18
+        x: 44
+        y: 21
+        width: 32
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_26
+      name: footman_26
       rect:
         serializedVersion: 2
-        x: 54
-        y: 26
-        width: 27
-        height: 16
+        x: 79
+        y: 13
+        width: 36
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_27
+      name: footman_27
       rect:
         serializedVersion: 2
-        x: 83
-        y: 26
-        width: 29
-        height: 16
+        x: 117
+        y: 13
+        width: 40
+        height: 23
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_28
+      name: footman_28
       rect:
         serializedVersion: 2
         x: 5
@@ -460,7 +460,7 @@ TextureImporter:
       outline: []
       tessellationDetail: 0
     - serializedVersion: 2
-      name: Ye_Oldy_Spike_Guy_29
+      name: footman_29
       rect:
         serializedVersion: 2
         x: 27
