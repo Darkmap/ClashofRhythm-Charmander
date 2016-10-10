@@ -25,16 +25,16 @@ public class BtnClickManager : MonoBehaviour
 		if (System.Math.Abs (width - standard) <= 20.0f) {
 			ShowScore( "amazing",txtCenter);
 			OK.Play ();
-			Main.score += 100;
+			MusicParameters.score += 100;
 		} else if (System.Math.Abs (width - standard) <= 40.0f) {
 			ShowScore ("good",txtCenter);
 			OK.Play ();
-			Main.score += 50;
+			MusicParameters.score += 50;
 				
 		} else {
 			ShowScore ("bad",txtCenter);
 			Error.Play ();
-			Main.score -= 50;
+			MusicParameters.score -= 50;
 				
 		}
     }
@@ -52,16 +52,16 @@ public class BtnClickManager : MonoBehaviour
 		if (System.Math.Abs (width - standard) <= 20.0f) {
 			ShowScore( "amazing",txtRight);
 			OK.Play ();
-			Main.score += 100;
+			MusicParameters.score += 100;
 		} else if (System.Math.Abs (width - standard) <= 40.0f) {
 			ShowScore ("good",txtRight);
 			OK.Play ();
-			Main.score += 50;
+			MusicParameters.score += 50;
 
 		} else {
 			ShowScore ("bad",txtRight);
 			Error.Play ();
-			Main.score -= 50;
+			MusicParameters.score -= 50;
 
 		}
 	}

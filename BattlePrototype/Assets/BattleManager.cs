@@ -181,7 +181,14 @@ public class BattleManager : MonoBehaviour {
 
 	void attack_round() {
 		if (!move_forward && !reverse && !move_back) {
-//			move_forward = true;
+			Debug.Log (MusicParameters.count);
+			if (MusicParameters.count == 10) {
+				if (MusicParameters.getPortion () >= 0.2) {
+					move_forward = true;
+					MainMusic.play = false;
+				}
+				MusicParameters.clean ();
+			}
 		} else {
 			if (move_forward) {
 				bool user = moveUserForward ();
@@ -201,6 +208,7 @@ public class BattleManager : MonoBehaviour {
 				if (!user && !enemy) {
 					Invoke ("rotationRestore", 0.5f);
 					move_back = false;
+					MainMusic.play = true;
 				}
 			}
 		}
