@@ -56,11 +56,29 @@ public class BattleManager : MonoBehaviour {
 //		
 //	}
 
-	public bool move_forward = false;
+	/***
+	 * Attack control
+	***/ 
+
+	// States
+	bool move_forward = false;
 	bool reverse = false;
 	bool move_back = false;
+	// Performance
+	float performance = 0f;
 
+	// UI control
+	public GameObject leftRing;
+	public GameObject rightRing;
 
+	public void setRingsActive(bool flag) {
+		if (leftRing.activeSelf != flag) {
+			leftRing.SetActive (flag);
+		}
+		if (rightRing.activeSelf != flag) {
+			rightRing.SetActive (flag);
+		}
+	}
 
 
 	// Use this for initialization
@@ -179,14 +197,18 @@ public class BattleManager : MonoBehaviour {
 		enemyObj.transform.localRotation = Quaternion.Euler(0, 180, 0);
 	}
 
+	void calculateResult() {
+		Debug.Log ("Score: " + this.performance);
+	}
+
 	void attack_round() {
 		if (!move_forward && !reverse && !move_back) {
-			Debug.Log (MusicParameters.count);
+//			Debug.Log (MusicParameters.count);
 			if (MusicParameters.count == 10) {
-				if (MusicParameters.getPortion () >= 0.2) {
-					move_forward = true;
-					MainMusic.play = false;
-				}
+				performance = MusicParameters.getPortion ();
+				move_forward = true;
+				MainMusic.play = false;
+				setRingsActive (false);
 				MusicParameters.clean ();
 			}
 		} else {
@@ -200,6 +222,7 @@ public class BattleManager : MonoBehaviour {
 				}
 			} else if (reverse) {
 				Invoke ("hurt", 0.5f);
+				Invoke ("calculateResult", 0.6f);
 				Invoke ("setMoveBack", 1);
 				reverse = false;
 			} else if(move_back){
@@ -209,6 +232,7 @@ public class BattleManager : MonoBehaviour {
 					Invoke ("rotationRestore", 0.5f);
 					move_back = false;
 					MainMusic.play = true;
+					setRingsActive (true);
 				}
 			}
 		}

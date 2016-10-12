@@ -40,9 +40,7 @@ public class BtnClickManager : MonoBehaviour
     }
 
 
-	public void RightClick()
-	{
-		Debug.Log ("123");
+	public void RightClick() {
 		if (MainMusic.right == 0)
 			return;
 
@@ -65,11 +63,6 @@ public class BtnClickManager : MonoBehaviour
 
 		}
 	}
-
- 
-
-
-
 
 	public void ShowScore(string score,Text txt)
 	{
