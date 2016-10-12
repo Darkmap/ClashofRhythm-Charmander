@@ -71,6 +71,8 @@ public class BattleManager : MonoBehaviour {
 	public GameObject leftRing;
 	public GameObject rightRing;
 
+	public Text performResult;
+
 	public void setRingsActive(bool flag) {
 		if (leftRing.activeSelf != flag) {
 			leftRing.SetActive (flag);
@@ -198,7 +200,12 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	void calculateResult() {
-		Debug.Log ("Score: " + this.performance);
+		performResult.text = "Score: " + this.performance;
+		Invoke ("cleanResult", 1.5f);
+	}
+
+	void cleanResult() {
+		performResult.text = "";
 	}
 
 	void attack_round() {
@@ -210,6 +217,7 @@ public class BattleManager : MonoBehaviour {
 				MainMusic.play = false;
 				setRingsActive (false);
 				MusicParameters.clean ();
+				calculateResult ();
 			}
 		} else {
 			if (move_forward) {
@@ -222,7 +230,6 @@ public class BattleManager : MonoBehaviour {
 				}
 			} else if (reverse) {
 				Invoke ("hurt", 0.5f);
-				Invoke ("calculateResult", 0.6f);
 				Invoke ("setMoveBack", 1);
 				reverse = false;
 			} else if(move_back){
