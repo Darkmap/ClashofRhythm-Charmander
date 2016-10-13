@@ -31,9 +31,9 @@ public class MainMusic : MonoBehaviour {
 						gameObject.transform.localScale = new Vector3 (0, 0, 0);
 					}
 
-					float collapse_factor = 1f * collapse_rate * Time.deltaTime;
+					float collapse_factor = 0.8f * collapse_rate * Time.deltaTime;
 					gameObject.transform.localScale -= new Vector3 (collapse_factor, collapse_factor, collapse_factor);
-					rotation = (rotation + (isRight ? 1 : -1) * 360f * Time.deltaTime) % 360;
+					rotation = (rotation + (isRight ? 1 : -1) * 240f * Time.deltaTime) % 360;
 					gameObject.transform.localRotation = Quaternion.Euler (0, 0, rotation);
 				} else {
 					collapse_rate = Random.value * (0.5f) + 0.3f;

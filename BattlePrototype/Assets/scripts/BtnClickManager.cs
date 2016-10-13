@@ -18,27 +18,29 @@ public class BtnClickManager : MonoBehaviour
 
     public void CenterClick()
     {
-		if (MainMusic.once == 0)
+//		OKLeft.Play ();
+		if (MainMusic.once == 0) {
+			Error.Play ();
 			return;
+		}
 		
 		float width = (circle.rectTransform.rect.width * circle.transform.localScale.x);
 		float standard = sun.rectTransform.rect.width;
 		MainMusic.once = 0;
 		if (System.Math.Abs (width - standard) <= 20.0f) {
 			ShowScore( "amazing",txtCenter);
-			OKLeft.Play ();
-//			playOK();
+//			OKLeft.Play ();
+			playOK();
 			MusicParameters.score += 100;
 		} else if (System.Math.Abs (width - standard) <= 40.0f) {
 			ShowScore ("good",txtCenter);
-			OKLeft.Play ();
-//			playOK();
+//			OKLeft.Play ();
+			playOK();
 			MusicParameters.score += 50;
 		} else {
 			ShowScore ("bad",txtCenter);
 			Error.Play ();
 			MusicParameters.score -= 50;
-				
 		}
     }
 
@@ -49,21 +51,24 @@ public class BtnClickManager : MonoBehaviour
 	}
 
 	public void RightClick() {
-		if (MainMusic.right == 0)
+//		OKRight.Play ();
+		if (MainMusic.right == 0) {
+			Error.Play ();
 			return;
+		}
 
 		float width = (stars.rectTransform.rect.width * stars.transform.localScale.x);
 		float standard = moon.rectTransform.rect.width;
 		MainMusic.right = 0;
 		if (System.Math.Abs (width - standard) <= 20.0f) {
 			ShowScore( "amazing",txtRight);
-			OKRight.Play ();
-//			playOK();
+//			OKRight.Play ();
+			playOK();
 			MusicParameters.score += 100;
 		} else if (System.Math.Abs (width - standard) <= 40.0f) {
 			ShowScore ("good",txtRight);
-			OKRight.Play ();
-//			playOK();
+//			OKRight.Play ();
+			playOK();
 			MusicParameters.score += 50;
 
 		} else {
