@@ -61,17 +61,21 @@ public class BattleManager : MonoBehaviour {
 	***/ 
 
 	// States
-	bool move_forward = false;
-	bool reverse = false;
-	bool move_back = false;
+	public static bool move_forward = false;
+	public static bool reverse = false;
+	public static bool move_back = false;
+	public static bool end = false;
+
 	// Performance
 	float performance = 0f;
+	string performanceText = "";
+	int performanceType = 0;
 
 	// UI control
+	public Text performResult;
+
 	public GameObject leftRing;
 	public GameObject rightRing;
-
-	public Text performResult;
 
 	public void setRingsActive(bool flag) {
 		if (leftRing.activeSelf != flag) {
@@ -192,6 +196,7 @@ public class BattleManager : MonoBehaviour {
 	void hurt() {
 		userAnimator.SetBool ("hurt", true);
 		enemyAnimator.SetBool ("hurt", true);
+		doingAttack ();
 	}
 
 	void rotationRestore() {
@@ -199,25 +204,80 @@ public class BattleManager : MonoBehaviour {
 		enemyObj.transform.localRotation = Quaternion.Euler(0, 180, 0);
 	}
 
-	void calculateResult() {
-		performResult.text = "Score: " + this.performance;
-		Invoke ("cleanResult", 1.5f);
+	void calculateScore() {
+		if (performance <= 0) {
+			performanceType = 1;
+			performanceText = "Terrible :(";
+		} else if(performance <= 0.2) {
+			performanceType = 2;
+			performanceText = "It's OK.";
+		} else if(performance <= 0.4) {
+			performanceType = 3;
+			performanceText = "Good!";
+		} else{
+			performanceType = 4;
+			performanceText = "Epic!!!";
+		}
+		setMonitorText (performanceText);
 	}
 
+	void setMonitorText(string text) {
+		performResult.text = text;
+		Invoke ("cleanResult", 1.5f);
+	}
 	void cleanResult() {
 		performResult.text = "";
+	}
+
+	public static bool isAttacking() {
+		return move_forward || reverse || move_back;
+	}
+
+	void doingAttack() {
+		switch (performanceType) {
+		case 1:
+			playerHealthBar.fillAmount -= 0.2f;
+			break;
+		case 2:
+			playerHealthBar.fillAmount -= 0.1f;
+			enemyHealthBar.fillAmount -= 0.1f;
+			break;
+		case 3:
+			enemyHealthBar.fillAmount -= 0.2f;
+			break;
+		case 4:
+			enemyHealthBar.fillAmount -= 0.4f;
+			break;
+		default:
+			break;
+		}
+		if (playerHealthBar.fillAmount <= 0.01f) {
+			end = true;
+			userObj.SetActive (false);
+			// TODO remove player unit
+		} 
+		if (enemyHealthBar.fillAmount <= 0.01f) {
+			end = true;
+			enemyObj.SetActive (false);
+			// TODO remove enemy unit
+		}
+		if (end) {
+			move_forward = false;
+			reverse = false;
+			move_back = false;
+		}
 	}
 
 	void attack_round() {
 		if (!move_forward && !reverse && !move_back) {
 //			Debug.Log (MusicParameters.count);
-			if (MusicParameters.count == 10) {
+			if (MusicParameters.count >= 10) {
 				performance = MusicParameters.getPortion ();
 				move_forward = true;
 				MainMusic.play = false;
 				setRingsActive (false);
 				MusicParameters.clean ();
-				calculateResult ();
+				calculateScore ();
 			}
 		} else {
 			if (move_forward) {
@@ -248,7 +308,10 @@ public class BattleManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-
-		attack_round ();
+		if (end) {
+			// TODO call something to end this game
+		} else {
+			attack_round ();
+		}
 	}
 }

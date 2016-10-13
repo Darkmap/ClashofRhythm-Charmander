@@ -8,7 +8,9 @@ public class BtnClickManager : MonoBehaviour
     public Text txtCenter;
 	public Image circle;
 	public Image sun;
-	public AudioSource OK;
+	public AudioSource OKLeft;
+	public AudioSource OKRight;
+	public AudioSource[] OKs;
 	public AudioSource Error;
 	public Image moon;
 	public Image stars;
@@ -24,13 +26,14 @@ public class BtnClickManager : MonoBehaviour
 		MainMusic.once = 0;
 		if (System.Math.Abs (width - standard) <= 20.0f) {
 			ShowScore( "amazing",txtCenter);
-			OK.Play ();
+			OKLeft.Play ();
+//			playOK();
 			MusicParameters.score += 100;
 		} else if (System.Math.Abs (width - standard) <= 40.0f) {
 			ShowScore ("good",txtCenter);
-			OK.Play ();
+			OKLeft.Play ();
+//			playOK();
 			MusicParameters.score += 50;
-				
 		} else {
 			ShowScore ("bad",txtCenter);
 			Error.Play ();
@@ -39,6 +42,11 @@ public class BtnClickManager : MonoBehaviour
 		}
     }
 
+
+	public void playOK() {
+		int idx = Random.Range (0, 5);
+		OKs [idx].Play ();
+	}
 
 	public void RightClick() {
 		if (MainMusic.right == 0)
@@ -49,18 +57,19 @@ public class BtnClickManager : MonoBehaviour
 		MainMusic.right = 0;
 		if (System.Math.Abs (width - standard) <= 20.0f) {
 			ShowScore( "amazing",txtRight);
-			OK.Play ();
+			OKRight.Play ();
+//			playOK();
 			MusicParameters.score += 100;
 		} else if (System.Math.Abs (width - standard) <= 40.0f) {
 			ShowScore ("good",txtRight);
-			OK.Play ();
+			OKRight.Play ();
+//			playOK();
 			MusicParameters.score += 50;
 
 		} else {
 			ShowScore ("bad",txtRight);
 			Error.Play ();
 			MusicParameters.score -= 50;
-
 		}
 	}
 
