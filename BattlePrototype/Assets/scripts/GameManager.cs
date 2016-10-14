@@ -28,11 +28,21 @@ public class GameManager : MonoBehaviour {
 
 	//Prefabs
 	public GameObject TilePrefab;
-	public GameObject UserPlayerPrefab;
-	public GameObject AIPlayerPrefab;
+	//public GameObject UserPlayerPrefab;
+	//public GameObject AIPlayerPrefab;
+	GameObject[] playerUnitPrefabs;
+	GameObject[] aiUnitPrefabs;
+	public GameObject archer;
+	public GameObject gunman;
+	public GameObject knight;
+
+	public GameObject ninja;
+	public GameObject samurai;
+	public GameObject zombie;
 
 	// Use these for initialization
 	Tile[,] map;
+
 	List<UserPlayer> userPlayers;
 	List<AIPlayer> aiPlayers;
 	Player currentPlayer;
@@ -142,7 +152,7 @@ public class GameManager : MonoBehaviour {
 		Player p = currentPlayer;
 		if (!p.moved) {
 			if (mDistance (p.moveDestination, destTile.transform.position) <= p.steps) {
-				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, 1);
+				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, -1);
 				p.moved = true;
 				if (isTurnOver ()) {
 					nextTurn ();
@@ -174,18 +184,7 @@ public class GameManager : MonoBehaviour {
 		}
 		return true;
 	}
-
-//	void generateMap() {
-//		map = new Tile[rows, columns];
-//		for (int i = 0; i < rows; i ++) {
-//			for (int j = 0; j < columns; j++) {
-//				GameObject gobj = (GameObject)Instantiate(TilePrefab, new Vector3(2 * (-j) + rows, 2*(i) - columns, 0) + mapPosition, Quaternion.Euler(new Vector3()));
-//				Tile tile = gobj.GetComponent<Tile>();
-//				tile.gridPosition = new Vector2(i, j);
-//				map [i, j] = tile;
-//			}
-//		}
-//	}
+		
 	void generateMap(){
 		
 		map = new Tile[rows, columns];
@@ -198,7 +197,7 @@ public class GameManager : MonoBehaviour {
 				if (Random.Range (0f, 1f) > 0.15) {
 					var go = Instantiate (TilePrefab);
 					go.name = "Tile (" + i + ", " + j + ")";
-					go.transform.position = new Vector3 (2 * (j) - rows, 2 * (-i) + columns, 0) + mapPosition;
+					go.transform.position = new Vector3 (2 * (j) - columns, 2 * (-i) + rows, 0) + mapPosition;
 					map [i, j] = go.GetComponent<Tile> ();
 				}
 			}
@@ -222,9 +221,22 @@ public class GameManager : MonoBehaviour {
 	void generatePlayer() {
 		userPlayers = new List<UserPlayer>();
 		aiPlayers = new List<AIPlayer> ();
+		playerUnitPrefabs = new GameObject[3];
+		aiUnitPrefabs = new GameObject[3];
+		playerUnitPrefabs [0] = gunman;
+		playerUnitPrefabs [1] = knight;
+		playerUnitPrefabs [2] = archer;
+		aiUnitPrefabs [0] = ninja;
+		aiUnitPrefabs [1] = samurai;
+		aiUnitPrefabs [2] = zombie;
+
 		for (int i = 0; i < 3; i++) {
 			UserPlayer player;
-			GameObject gobj = (GameObject)Instantiate(UserPlayerPrefab, new Vector3(2*(i) - rows, 0 + columns, 2) + mapPosition, Quaternion.Euler(new Vector3()));
+			GameObject gobj = (GameObject)Instantiate(playerUnitPrefabs[i], new Vector3(2*(i) - columns, 0 + rows, -1) + mapPosition, Quaternion.Euler(new Vector3()));
+
+			Vector3 userScale = gobj.transform.localScale;
+			gobj.transform.localScale = new Vector3(userScale.x*1.5f , userScale.y*1.5f, userScale.z*1.5f);
+
 			player = gobj.GetComponent<UserPlayer>();
 			player.setPlayerIndex (i);
 			userPlayers.Add (player);
@@ -232,7 +244,11 @@ public class GameManager : MonoBehaviour {
 		currentPlayer = userPlayers [0];
 		for (int i = 0; i < 3; i++) {
 			AIPlayer aiplayer;
-			GameObject gobj2 = (GameObject)Instantiate(AIPlayerPrefab, new Vector3(- 2 * i + rows - 2, -columns + 2, 2) + mapPosition, Quaternion.Euler(new Vector3()));
+			GameObject gobj2 = (GameObject)Instantiate(aiUnitPrefabs[i], new Vector3(- 2 * i + columns - 2 , 2-rows, -1) + mapPosition, Quaternion.Euler(new Vector3(0, 180, 0)));
+
+			Vector3 enemyScale = gobj2.transform.localScale;
+			gobj2.transform.localScale = new Vector3(enemyScale.x*1.5f , enemyScale.y*1.5f, enemyScale.z*1.5f);
+
 			aiplayer = gobj2.GetComponent<AIPlayer> ();
 			aiplayer.setPlayerIndex (i);
 			aiPlayers.Add(aiplayer);
@@ -240,11 +256,22 @@ public class GameManager : MonoBehaviour {
 
 	}
 
-	public void enterBattleScene(Player playerUnit, Player enemyUnit){
+	public void enterBattleScene(Player self, Player enemy){
 		Debug.Log ("Battle Start!");
-		battleUI.gameObject.SetActive(true);
-		battleCamera.SetActive (true);
-		boardCamera.SetActive (false);
+		//battleUI.gameObject.SetActive(true);
+		//battleCamera.SetActive (true);
+		//boardCamera.SetActive (false);
+		GameObject activePlayer;
+		GameObject activeEnemy;
+		if (self.GetType() == typeof(UserPlayer)){
+			activePlayer = self.gameObject;
+			activeEnemy = enemy.gameObject;
+		} else {
+			activePlayer = enemy.gameObject;
+			activeEnemy = self.gameObject;
+		}
+		Debug.Log ("p: " +activePlayer.name);
+		Debug.Log ("p: " +activeEnemy.name);
 	}
 
 	// Use this for initialization

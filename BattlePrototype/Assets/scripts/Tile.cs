@@ -39,9 +39,7 @@ public class Tile : MonoBehaviour {
 		foreach (Tile tile in neighbors) {
 			sideValues.Append (tile == null ? "0" : "1");
 		}
-		Debug.Log (sideValues.ToString ());
 		autotileID = Convert.ToInt32 (sideValues.ToString (), 2);
-		Debug.Log (autotileID);
 	}
 }
 
