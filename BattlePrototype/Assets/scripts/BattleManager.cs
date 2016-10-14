@@ -36,11 +36,11 @@ public class BattleManager : MonoBehaviour {
 	// Text
 	public Text playerNextMove;
 	public Text enemyNextMove;
-	string enemyNextMoveStr = "";
+//	string enemyNextMoveStr = "";
 
 
-	public Vector3 playerLocation = new Vector3(-4f, 0f, 0f);
-	public Vector3 enemyLocation = new Vector3(4f, 0f, 0f);
+	public Vector3 playerLocation = new Vector3(-4f, 5f, 0f);
+	public Vector3 enemyLocation = new Vector3(4f, 5f, 0f);
 
 	GameObject userObj;
 	GameObject enemyObj;
@@ -79,6 +79,9 @@ public class BattleManager : MonoBehaviour {
 
 	// Sounds
 	public AudioSource fightSound;
+	public AudioSource magicSound;
+	public AudioSource gunSound;
+	public AudioSource arrowSound;
 
 	public void playFightSound() {
 		fightSound.Play ();
@@ -86,6 +89,42 @@ public class BattleManager : MonoBehaviour {
 	}
 	public void stopPlayFightSound() {
 		fightSound.Pause ();
+	}
+
+	public void playMagicSound() {
+		magicSound.Play ();
+		Invoke ("stopPlayMagicSound", 1f);
+	}
+	public void stopPlayMagicSound() {
+		magicSound.Pause ();
+	}
+
+	public void playGunSound() {
+		gunSound.Play ();
+		Invoke ("stopPlayGunSound", 1f);
+	}
+	public void stopPlayGunSound() {
+		gunSound.Pause ();
+	}
+
+	public void playArrowSound() {
+		arrowSound.Play ();
+		Invoke ("stopPlayArrowSound", 1f);
+	}
+	public void stopPlayArrowSound() {
+		arrowSound.Pause ();
+	}
+
+	public void playRelatedSound(GameObject obj) {
+		if (obj.name.Contains ("mage")) {
+			playMagicSound ();
+		} else if (obj.name.Contains ("gunman")) {
+			playGunSound ();
+		} else if (obj.name.Contains ("archer")) {
+			playArrowSound ();
+		} else {
+			playFightSound ();
+		}
 	}
 
 
@@ -98,20 +137,18 @@ public class BattleManager : MonoBehaviour {
 		}
 	}
 
-	void OnCollisionEnter(Collider collider) {
-		Debug.Log ("OnCollisionEnter");
-	}
-
 	// Use this for initialization
 	void Start () {
 		userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
-		userObj.transform.localScale += new Vector3(1f,1f,1f);
+		Vector3 userScale = userObj.transform.localScale;
+		userObj.transform.localScale = new Vector3(userScale.x*2 , userScale.y*2, userScale.z*2);
 		Rigidbody userRb = userObj.GetComponent<Rigidbody>();
 		userAnimator = userObj.GetComponent<Animator>();
 		userRb.isKinematic = false;
 
 		enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
-		enemyObj.transform.localScale += new Vector3(1f,1f,1f);
+		Vector3 enemyScale = enemyObj.transform.localScale;
+		enemyObj.transform.localScale = new Vector3(enemyScale.x*2 , enemyScale.y*2, enemyScale.z * 2);
 		Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
 		enemyAnimator = enemyObj.GetComponent<Animator>();
 		enemyRb.isKinematic = false;
@@ -311,7 +348,8 @@ public class BattleManager : MonoBehaviour {
 					reverse = true;
 				}
 			} else if (reverse) {
-				playFightSound ();
+				playRelatedSound(userObj);
+				playRelatedSound(enemyObj);
 				Invoke ("hurt", 0.5f);
 				Invoke ("setMoveBack", 1f);
 				reverse = false;
