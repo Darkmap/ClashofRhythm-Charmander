@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using Random = UnityEngine.Random;
 using System.Collections;
 using System.Collections.Generic;
 using System;
@@ -6,6 +7,24 @@ using System;
 public class GameManager : MonoBehaviour {
 	public Vector3 mapPosition = new Vector3 (-500, -500, 0);
 
+	public enum TileType{
+		Empty = -1,
+		Grass = 15,
+		Tree = 16,
+		Hills = 17,
+		Mountains = 18,
+		Towns = 19,
+		Castle = 20,
+		Monster = 21
+	}
+
+	[Header("Map Sprites")]
+	public Texture2D islandTexture;
+
+	//Camera
+	public GameObject battleCamera; 
+	public GameObject boardCamera;
+	public GameObject battleUI;
 
 	//Prefabs
 	public GameObject TilePrefab;
@@ -13,12 +32,12 @@ public class GameManager : MonoBehaviour {
 	public GameObject AIPlayerPrefab;
 
 	// Use these for initialization
-	List<List<Tile>> map;
+	Tile[,] map;
 	List<UserPlayer> userPlayers;
 	List<AIPlayer> aiPlayers;
 	Player currentPlayer;
-	public int mapWidth = 6;
-	public int mapLength = 8;
+	public int rows = 6;
+	public int columns = 8;
 	public int turn;
 
 	// Use this for initialization
@@ -73,6 +92,34 @@ public class GameManager : MonoBehaviour {
 		return true;
 	}
 
+	private void FindNeighbors(){
+		
+		for (var r = 0; r < rows; r++) {
+
+			for (var c = 0; c < columns; c++) {
+				if (map [r, c] == null)
+					continue;
+				if (r < rows - 1) {
+					map [r, c].addNeighbor (Sides.Bottom, map [(r + 1) , c]);
+				}
+				if (c < columns - 1) {
+					map [r, c].addNeighbor (Sides.Right, map [ r , c + 1]);
+				}
+
+				if (c > 0) {
+					map [r, c].addNeighbor (Sides.Left, map [r , c - 1]);
+				}
+
+				if (r > 0) {
+					map [r, c].addNeighbor (Sides.Top, map [r-1 , c]);
+				}
+
+			}
+
+		}
+
+	}
+
 	public void nextTurn(){
 		if (turn == 0) {
 			foreach (AIPlayer unit in aiPlayers) {
@@ -95,7 +142,7 @@ public class GameManager : MonoBehaviour {
 		Player p = currentPlayer;
 		if (!p.moved) {
 			if (mDistance (p.moveDestination, destTile.transform.position) <= p.steps) {
-				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, -1);
+				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, 1);
 				p.moved = true;
 				if (isTurnOver ()) {
 					nextTurn ();
@@ -128,17 +175,47 @@ public class GameManager : MonoBehaviour {
 		return true;
 	}
 
-	void generateMap() {
-		map = new List<List<Tile>>();
-		for (int i = 0; i < mapLength; i ++) {
-			List<Tile> row = new List<Tile>();
-			for (int j = 0; j < mapWidth; j++) {
-				GameObject gobj = (GameObject)Instantiate(TilePrefab, new Vector3(2*(i) - mapLength, 2 * (-j) + mapWidth, 0) + mapPosition, Quaternion.Euler(new Vector3()));
-				Tile tile = gobj.GetComponent<Tile>();
-				tile.gridPosition = new Vector2(i, j);
-				row.Add(tile);
+//	void generateMap() {
+//		map = new Tile[rows, columns];
+//		for (int i = 0; i < rows; i ++) {
+//			for (int j = 0; j < columns; j++) {
+//				GameObject gobj = (GameObject)Instantiate(TilePrefab, new Vector3(2 * (-j) + rows, 2*(i) - columns, 0) + mapPosition, Quaternion.Euler(new Vector3()));
+//				Tile tile = gobj.GetComponent<Tile>();
+//				tile.gridPosition = new Vector2(i, j);
+//				map [i, j] = tile;
+//			}
+//		}
+//	}
+	void generateMap(){
+		
+		map = new Tile[rows, columns];
+		generateGrid ();
+	}
+	void generateGrid() {
+		Sprite[] terrain_sprites = Resources.LoadAll<Sprite> (islandTexture.name);
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				if (Random.Range (0f, 1f) > 0.15) {
+					var go = Instantiate (TilePrefab);
+					go.name = "Tile (" + i + ", " + j + ")";
+					go.transform.position = new Vector3 (2 * (j) - rows, 2 * (-i) + columns, 0) + mapPosition;
+					map [i, j] = go.GetComponent<Tile> ();
+				}
 			}
-			map.Add(row);
+		}
+
+		FindNeighbors ();
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				var tile = map [i, j];
+				if (tile == null)
+					continue;
+				var spriteID = tile.autotileID;
+				if (spriteID >= 0) {
+					var sr = tile.gameObject.GetComponent<SpriteRenderer> ();
+					sr.sprite = terrain_sprites [spriteID];
+				}
+			}
 		}
 	}
 
@@ -147,7 +224,7 @@ public class GameManager : MonoBehaviour {
 		aiPlayers = new List<AIPlayer> ();
 		for (int i = 0; i < 3; i++) {
 			UserPlayer player;
-			GameObject gobj = (GameObject)Instantiate(UserPlayerPrefab, new Vector3(2*(i) - mapLength, 0 + mapWidth, -2) + mapPosition, Quaternion.Euler(new Vector3()));
+			GameObject gobj = (GameObject)Instantiate(UserPlayerPrefab, new Vector3(2*(i) - rows, 0 + columns, 2) + mapPosition, Quaternion.Euler(new Vector3()));
 			player = gobj.GetComponent<UserPlayer>();
 			player.setPlayerIndex (i);
 			userPlayers.Add (player);
@@ -155,7 +232,7 @@ public class GameManager : MonoBehaviour {
 		currentPlayer = userPlayers [0];
 		for (int i = 0; i < 3; i++) {
 			AIPlayer aiplayer;
-			GameObject gobj2 = (GameObject)Instantiate(AIPlayerPrefab, new Vector3(- 2 * i + mapLength - 2, -mapWidth + 2, -2) + mapPosition, Quaternion.Euler(new Vector3()));
+			GameObject gobj2 = (GameObject)Instantiate(AIPlayerPrefab, new Vector3(- 2 * i + rows - 2, -columns + 2, 2) + mapPosition, Quaternion.Euler(new Vector3()));
 			aiplayer = gobj2.GetComponent<AIPlayer> ();
 			aiplayer.setPlayerIndex (i);
 			aiPlayers.Add(aiplayer);
@@ -164,7 +241,10 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void enterBattleScene(Player playerUnit, Player enemyUnit){
-
+		Debug.Log ("Battle Start!");
+		battleUI.gameObject.SetActive(true);
+		battleCamera.SetActive (true);
+		boardCamera.SetActive (false);
 	}
 
 	// Use this for initialization

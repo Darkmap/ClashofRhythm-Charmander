@@ -15,7 +15,7 @@ public class Player : MonoBehaviour {
     }
 	// Use this for initialization
 	void Start () {
-		steps = 10;
+		steps = 20;
 	}
 	
 	// Update is called once per frame
@@ -52,7 +52,6 @@ public class Player : MonoBehaviour {
 	void OnMouseDown(){
 		Player currentPlayer = GameManager.instance.getCurrentPlayer ();
 		Debug.Log (this.GetType ());
-		Debug.Log ("mouse down");
 		if (GameManager.instance.currentPlayerTurn () == this.GetType ()) {
 			if (moved) {
 				Debug.Log ("This unit has been moved");
@@ -60,7 +59,7 @@ public class Player : MonoBehaviour {
 				GameManager.instance.setCurrentPlayer (this);
 			}
 		} else {
-			if (GameManager.mDistance (this.transform.position, currentPlayer.transform.position) == 1 && !currentPlayer.moved) {
+			if (GameManager.mDistance (this.transform.position, currentPlayer.transform.position) == 2 && !currentPlayer.moved) {
 				currentPlayer.moved = true;
 				GameManager.instance.enterBattleScene (currentPlayer, this);
 				return;
