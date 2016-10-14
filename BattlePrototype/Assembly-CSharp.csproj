@@ -61,6 +61,7 @@
      <Compile Include="Assets\scripts\MusicUIManager.cs" />
      <Compile Include="Assets\scripts\Player.cs" />
      <Compile Include="Assets\scripts\Tile.cs" />
+     <Compile Include="Assets\scripts\Unit.cs" />
      <Compile Include="Assets\scripts\UserPlayer.cs" />
      <None Include="Assets\ActRPGsprites\readme.txt" />
      <None Include="Assets\material\Outlined-Silhouette Only.shader" />

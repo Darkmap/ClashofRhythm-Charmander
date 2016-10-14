@@ -77,6 +77,18 @@ public class BattleManager : MonoBehaviour {
 	public GameObject leftRing;
 	public GameObject rightRing;
 
+	// Sounds
+	public AudioSource fightSound;
+
+	public void playFightSound() {
+		fightSound.Play ();
+		Invoke ("stopPlayFightSound", 1f);
+	}
+	public void stopPlayFightSound() {
+		fightSound.Pause ();
+	}
+
+
 	public void setRingsActive(bool flag) {
 		if (leftRing.activeSelf != flag) {
 			leftRing.SetActive (flag);
@@ -86,6 +98,9 @@ public class BattleManager : MonoBehaviour {
 		}
 	}
 
+	void OnCollisionEnter(Collider collider) {
+		Debug.Log ("OnCollisionEnter");
+	}
 
 	// Use this for initialization
 	void Start () {
@@ -104,7 +119,8 @@ public class BattleManager : MonoBehaviour {
 
 
 	bool moveUserForward() {
-		Vector3 moveDestination = new Vector3 (-1f, 0f, 0f);
+		Vector3 moveDestination = new Vector3 (0f, 0f, 0f);
+//		Vector3 moveDestination = new Vector3 (-1f, 0f, 0f);
 
 		if (Math.Abs (moveDestination.x - userObj.transform.position.x) > 0.1f) {
 			userObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
@@ -147,7 +163,9 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	bool moveEnemyForward() {
-		Vector3 moveDestination = new Vector3 (1f, 0f, 0f);
+		Vector3 moveDestination = new Vector3 (0f, 0f, 0f);
+//		Vector3 moveDestination = new Vector3 (1f, 0f, 0f);
+
 		if (Math.Abs (moveDestination.x - enemyObj.transform.position.x) > 0.1f) {
 			enemyObj.transform.Translate (new Vector3 (1f, 0f, 0f) * 2 * Time.deltaTime);
 			if (!enemyAnimator.GetBool ("walk_down")) {
@@ -188,14 +206,18 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	void setMoveBack() {
-		userReverse ();
-		enemyReverse ();
-		move_back = true;
+		if (!end) {
+			userReverse ();
+			enemyReverse ();
+			move_back = true;
+		}
 	}
 
 	void hurt() {
-		userAnimator.SetBool ("hurt", true);
-		enemyAnimator.SetBool ("hurt", true);
+		if (performanceType <= 2)
+			userAnimator.SetBool ("hurt", true);
+		if (performanceType >= 2)
+			enemyAnimator.SetBool ("hurt", true);
 		doingAttack ();
 	}
 
@@ -289,8 +311,9 @@ public class BattleManager : MonoBehaviour {
 					reverse = true;
 				}
 			} else if (reverse) {
+				playFightSound ();
 				Invoke ("hurt", 0.5f);
-				Invoke ("setMoveBack", 1);
+				Invoke ("setMoveBack", 1f);
 				reverse = false;
 			} else if(move_back){
 				bool user = moveUserBack ();

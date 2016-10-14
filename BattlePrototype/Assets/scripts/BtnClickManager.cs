@@ -16,6 +16,9 @@ public class BtnClickManager : MonoBehaviour
 	public Image stars;
 	public Text txtRight;
 
+	public int[] playList = new int[8];
+	public int playIdx = 0;
+
     public void CenterClick()
     {
 //		OKLeft.Play ();
@@ -45,8 +48,17 @@ public class BtnClickManager : MonoBehaviour
     }
 
 
+//	public void playOK() {
+//		int idx = Random.Range (0, 5);
+//		OKs [idx].Play ();
+//	}
+
 	public void playOK() {
-		int idx = Random.Range (0, 5);
+//		int idx = Random.Range (0, 5);
+		int idx = playList[playIdx];
+		playIdx = (playIdx + 1) % (playList.Length - 1);
+//		Debug.Log (playIdx);
+//		Debug.Log (idx);
 		OKs [idx].Play ();
 	}
 
@@ -98,7 +110,7 @@ public class BtnClickManager : MonoBehaviour
 		txtRight.text = "";
 	}
 	public void Start(){
-		
+		playIdx = 0;
 	}
 		
 

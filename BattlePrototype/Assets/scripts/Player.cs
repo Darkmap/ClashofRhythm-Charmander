@@ -29,6 +29,18 @@ public class Player : MonoBehaviour {
 
     }
 
+	void OnCollisionEnter (Collision col)
+	{
+		if (!col.gameObject.name.Equals ("ground")) {
+			Animator unitAnimator = gameObject.GetComponent<Animator>();
+			unitAnimator.SetBool ("walk_down", false);
+			unitAnimator.SetBool ("attack", true);
+			BattleManager.move_forward = false;
+			BattleManager.reverse = true;
+		}
+
+	}
+
 	public Type getOpponent(Type p){
 		if (p == typeof(UserPlayer)) {
 			return typeof(AIPlayer);
