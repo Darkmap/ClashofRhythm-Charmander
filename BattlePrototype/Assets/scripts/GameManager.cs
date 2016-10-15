@@ -221,29 +221,36 @@ public class GameManager : MonoBehaviour {
 		Sprite[] terrain_sprites = Resources.LoadAll<Sprite> (islandTexture.name);
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				if (Random.Range (0f, 1f) > 0) {
-					var go = Instantiate (TilePrefab);
-					go.name = "Tile (" + i + ", " + j + ")";
-					go.transform.position = new Vector3 (2 * (j) - columns, 2 * (-i) + rows, 0) + mapPosition;
-					map [i, j] = go.GetComponent<Tile> ();
-					map [i, j].gridPosition = new Vector2 (i, j);
-				}
+				var go = Instantiate (TilePrefab);
+				go.name = "Tile (" + i + ", " + j + ")";
+				go.transform.position = new Vector3 (2 * (j) - columns, 2 * (-i) + rows, 0) + mapPosition;
+				map [i, j] = go.GetComponent<Tile> ();
+				map [i, j].gridPosition = new Vector2 (i, j);
 			}
 		}
 
 		FindNeighbors ();
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
+				float r = Random.Range (0f, 1f);
 				var tile = map [i, j];
 				if (tile == null)
 					continue;
 				var spriteID = tile.autotileID;
+				if (spriteID == 15 && r > 0.9f)
+					spriteID = 16;
+				else if (spriteID == 15 && r > 0.8f)
+					spriteID = 17;
 				if (spriteID >= 0) {
 					var sr = tile.gameObject.GetComponent<SpriteRenderer> ();
 					sr.sprite = terrain_sprites [spriteID];
 				}
 			}
 		}
+		Tile tile0 = map[0,0];
+		Tile tilen = map [rows - 1, columns - 1];
+		tile0.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
+		tilen.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
 	}
 
 	void generatePlayer() {
