@@ -166,8 +166,8 @@ public class GameManager : MonoBehaviour {
 					return;
 				}
 			}
-//			Invoke("nextTurn",  4);
-			nextTurn();
+			Invoke("nextTurn",  4);
+//			nextTurn();
 		}
 	}
 
@@ -185,7 +185,7 @@ public class GameManager : MonoBehaviour {
 				destTile.playerOnTile = p;
 				if (isTurnOver ()) {
 					Debug.Log ("moveCurrentPlayer");
-					Invoke("nextTurn",  2);
+					Invoke("nextTurn",  4);
 				}
 			}
 		} else {
