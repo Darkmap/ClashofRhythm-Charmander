@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Random = UnityEngine.Random;
 using System.Collections;
 using System.Collections.Generic;
@@ -24,6 +25,9 @@ public class GameManager : MonoBehaviour {
 	public GameObject activePlayer;
 	public GameObject activeEnemy;
 
+	//UI
+	public Text boardText;
+
 	//BGM
 	public AudioSource bgm1;
 	public AudioSource bgm2;
@@ -32,6 +36,8 @@ public class GameManager : MonoBehaviour {
 	public GameObject battleCamera; 
 	public GameObject boardCamera;
 	public GameObject battleUI;
+
+	public GameObject boardUI;
 
 	//Prefabs
 	public GameObject TilePrefab;
@@ -367,6 +373,7 @@ public class GameManager : MonoBehaviour {
 		BattleManager.end = false;
 		BattleManager.ended = false;
 
+		boardUI.gameObject.SetActive(false);
 		battleUI.gameObject.SetActive(true);
 		battleCamera.SetActive (true);
 		boardCamera.SetActive (false);
@@ -401,6 +408,7 @@ public class GameManager : MonoBehaviour {
 		bgm1.Play ();
 		bgm2.Stop ();
 
+		boardUI.gameObject.SetActive(true);
 		battleUI.gameObject.SetActive(false);
 		battleCamera.SetActive (false);
 		boardCamera.SetActive (true);
@@ -422,5 +430,9 @@ public class GameManager : MonoBehaviour {
 		foreach(Player p in aiPlayers){
 			p.TurnUpdate ();
 		}
+		boardText.text = ((turn == 0)
+			? "Player's Turn: "
+			: "Enemy's Turn:")
+			+ "Moving " + currentPlayer.gameObject.name.Substring(0, currentPlayer.gameObject.name.IndexOf('(')).ToUpperInvariant();
 	}
 }
