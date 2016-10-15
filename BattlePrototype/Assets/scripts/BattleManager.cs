@@ -18,6 +18,12 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	public void resetBattle() {
+		start = false;
+		hasSet = false;
+		end = false;
+		ended = true;
+		MainMusic.play = false;
+
 		playerHealthBar.fillAmount = 1f;
 		enemyHealthBar.fillAmount = 1f;
 		Destroy (userObj);
@@ -325,25 +331,25 @@ public class BattleManager : MonoBehaviour {
 		if (playerHealthBar.fillAmount <= 0.01f) {
 			end = true;
 			userObj.SetActive (false);
-			// TODO remove player unit
 			GameManager.instance.destoryCurrentPlayer();
 		} 
 		if (enemyHealthBar.fillAmount <= 0.01f) {
 			end = true;
 			enemyObj.SetActive (false);
-			// TODO remove enemy unit
 			GameManager.instance.destoryCurrentEnermy();
 		}
 		if (end) {
 			move_forward = false;
 			reverse = false;
 			move_back = false;
+		} else {
+			Invoke ("setMoveBack", 1f);
 		}
 	}
 
 	void attack_round() {
 		if (!move_forward && !reverse && !move_back) {
-			Debug.Log (MusicParameters.count);
+//			Debug.Log (MusicParameters.count);
 			if (MusicParameters.count >= 10) {
 				performance = MusicParameters.getPortion ();
 				move_forward = true;
@@ -365,7 +371,6 @@ public class BattleManager : MonoBehaviour {
 				playRelatedSound(userObj);
 				playRelatedSound(enemyObj);
 				Invoke ("hurt", 0.5f);
-				Invoke ("setMoveBack", 1f);
 				reverse = false;
 			} else if(move_back){
 				bool user = moveUserBack ();
@@ -404,12 +409,17 @@ public class BattleManager : MonoBehaviour {
 			if (ended) {
 				// Empty
 			} else if (end) {
-				GameManager.instance.backToBoard();
-				resetBattle ();
+				end = false;
 				ended = true;
+				Invoke ("endBattle", 3);
 			} else {
 				attack_round ();
 			}
 		}
+	}
+
+	void endBattle() {
+		GameManager.instance.backToBoard();
+		resetBattle ();
 	}
 }

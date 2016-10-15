@@ -157,6 +157,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void nextPlayer(){
+
 		if (turn == 1) {
 			foreach (AIPlayer unit in aiPlayers) {
 				if (!unit.moved) {
@@ -165,14 +166,15 @@ public class GameManager : MonoBehaviour {
 					return;
 				}
 			}
-			nextTurn ();
+//			Invoke("nextTurn",  4);
+			nextTurn();
 		}
 	}
 
 	public void moveCurrentPlayer(Tile destTile) {
 		Player p = currentPlayer;
 		Debug.Log (p.gameObject.name + "moved");
-		if (destTile.playerOnTile != null)
+		if (destTile.playerOnTile != null && destTile.playerOnTile.gameObject.activeSelf)
 			return;
 		if (!p.moved) {
 			if (mDistance (p.moveDestination, destTile.transform.position) <= p.steps) {
@@ -182,7 +184,8 @@ public class GameManager : MonoBehaviour {
 				p.gridPosition = destTile.gridPosition;
 				destTile.playerOnTile = p;
 				if (isTurnOver ()) {
-					nextTurn ();
+					Debug.Log ("moveCurrentPlayer");
+					Invoke("nextTurn",  2);
 				}
 			}
 		} else {
@@ -304,15 +307,12 @@ public class GameManager : MonoBehaviour {
 
 		Player p = currentPlayer;
 		if (p.GetType () == typeof(UserPlayer)) {
-//			Debug.Log ("userplayer");
 			return;
-		} else {
-//			Debug.Log ("not userplayer");
 		}
 		Player target = attackableTarget (p);
 		if (target != null) {
 			p.attack (target);
-		}else {
+		} else {
 			Tile currentTile = tileUnderPlayer (p);
 			bool flag = false;
 			for (int i = 2; i >= 0; i--) {
@@ -332,7 +332,9 @@ public class GameManager : MonoBehaviour {
 			}
 			p.moved = true;
 		}
-		Invoke("nextPlayer", 2f);
+		if (!battleCamera.activeSelf) {
+			Invoke ("nextPlayer", 4f);
+		}
 	}
 
 	public Tile tileUnderPlayer(Player p){
@@ -341,7 +343,7 @@ public class GameManager : MonoBehaviour {
 	public Player attackableTarget(Player p){
 		Tile[] neighbours = tileUnderPlayer(p).neighbors;
 		foreach (Tile tile in neighbours) {
-			if (tile != null && tile.playerOnTile != null && tile.playerOnTile.GetType() != p.GetType ()) {
+			if (tile != null && tile.playerOnTile != null && tile.playerOnTile.gameObject.activeSelf && tile.playerOnTile.GetType() != p.GetType ()) {
 				return tile.playerOnTile;
 			}
 		}
@@ -396,20 +398,20 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void backToBoard() {
-		BattleManager.start = false;
-		BattleManager.hasSet = false;
-
-		MainMusic.play = false;
-
 		bgm1.Play ();
 		bgm2.Stop ();
-
-		Debug.Log (bgm1);
-		Debug.Log (bgm2);
 
 		battleUI.gameObject.SetActive(false);
 		battleCamera.SetActive (false);
 		boardCamera.SetActive (true);
+
+		Debug.Log ("backToBoard");
+
+		if (isTurnOver ()) {
+			Invoke ("nextTurn", 4f);
+		} else {
+			Invoke ("nextPlayer", 4f);
+		}
 	}
 	
 	// Update is called once per frame

@@ -37,7 +37,7 @@ public class MainMusic : MonoBehaviour {
 					gameObject.transform.localRotation = Quaternion.Euler (0, 0, rotation);
 				} else {
 					collapse_rate = Random.value * (0.5f) + 0.3f;
-					gameObject.transform.localScale = new Vector3 (1, 1, 1);
+
 					MusicParameters.count += 1;
 					if (isRight) {
 						right = 1;
@@ -45,12 +45,22 @@ public class MainMusic : MonoBehaviour {
 						once = 1;
 					}
 					float temp = Random.value;
-					if (temp <= 0.2f) {
-						MainMusic.turnType = 0;
-					} else if (temp <= 0.6) {
+					if (temp <= 0.5f) {
 						MainMusic.turnType = 1;
 					} else {
 						MainMusic.turnType = 2;
+					}
+//					if (temp <= 0.2f) {
+//						MainMusic.turnType = 0;
+//					} else if (temp <= 0.6) {
+//						MainMusic.turnType = 1;
+//					} else {
+//						MainMusic.turnType = 2;
+//					}
+					if (isRight && MainMusic.turnType != 1) {
+						gameObject.transform.localScale = new Vector3 (1, 1, 1);
+					} else if(!isRight && MainMusic.turnType != 2){
+						gameObject.transform.localScale = new Vector3 (1, 1, 1);
 					}
 				}
 			}
