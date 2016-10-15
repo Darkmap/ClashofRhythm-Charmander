@@ -437,7 +437,7 @@ public class GameManager : MonoBehaviour {
 
 		if (userPlayers.Count == 0) {
 			boardText.text = "Defeated :(";
-		} else if (userPlayers.Count == 0) {
+		} else if (aiPlayers.Count == 0) {
 			boardText.text = "Victory :)";
 		} else {boardText.text = ((turn == 0)
 			? "Player's Turn: "
