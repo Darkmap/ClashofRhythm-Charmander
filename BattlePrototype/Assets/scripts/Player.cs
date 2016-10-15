@@ -9,6 +9,7 @@ public class Player : MonoBehaviour {
 	public int steps;
 	public bool moved;
 	public int unitClass= 0;
+	public Vector2 gridPosition = Vector2.zero;
     void Awake() {
 		moved = false;
         moveDestination = transform.position;
@@ -50,6 +51,9 @@ public class Player : MonoBehaviour {
 
 	}
 	void OnMouseDown(){
+		move ();
+	}
+	void move(){
 		Player currentPlayer = GameManager.instance.getCurrentPlayer ();
 		Debug.Log (this.GetType ());
 		if (GameManager.instance.currentPlayerTurn () == this.GetType ()) {
@@ -60,11 +64,18 @@ public class Player : MonoBehaviour {
 			}
 		} else {
 			if (GameManager.mDistance (this.transform.position, currentPlayer.transform.position) == 2 && !currentPlayer.moved) {
-				currentPlayer.moved = true;
-				GameManager.instance.enterBattleScene (currentPlayer, this);
+//				currentPlayer.moved = true;
+//				GameManager.instance.enterBattleScene (currentPlayer, this);
+//				return;
+				currentPlayer.attack(this);
 				return;
 			}
 			Debug.Log ("Not your turn.");
 		}
+	}
+
+	public void attack(Player p){
+		this.moved = true;
+		GameManager.instance.enterBattleScene (this, p);
 	}
 }

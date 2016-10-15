@@ -145,6 +145,7 @@ public class GameManager : MonoBehaviour {
 			turn = 1;
 			currentPlayer = aiPlayers [0];
 			Debug.Log ("AI's turn start.");
+			aiMove ();
 		} else if (turn == 1) {
 			foreach (UserPlayer unit in userPlayers) {
 				unit.moved = false;
@@ -155,12 +156,31 @@ public class GameManager : MonoBehaviour {
 		}
 	}
 
+	public void nextPlayer(){
+		if (turn == 1) {
+			foreach (AIPlayer unit in aiPlayers) {
+				if (!unit.moved) {
+					currentPlayer = unit;
+					aiMove ();
+					return;
+				}
+			}
+			nextTurn ();
+		}
+	}
+
 	public void moveCurrentPlayer(Tile destTile) {
 		Player p = currentPlayer;
+		Debug.Log (p.gameObject.name + "moved");
+		if (destTile.playerOnTile != null)
+			return;
 		if (!p.moved) {
 			if (mDistance (p.moveDestination, destTile.transform.position) <= p.steps) {
 				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, -1);
 				p.moved = true;
+				map [(int)p.gridPosition.x, (int)p.gridPosition.y].playerOnTile = null;
+				p.gridPosition = destTile.gridPosition;
+				destTile.playerOnTile = p;
 				if (isTurnOver ()) {
 					nextTurn ();
 				}
@@ -201,11 +221,12 @@ public class GameManager : MonoBehaviour {
 		Sprite[] terrain_sprites = Resources.LoadAll<Sprite> (islandTexture.name);
 		for (int i = 0; i < rows; i++) {
 			for (int j = 0; j < columns; j++) {
-				if (Random.Range (0f, 1f) > 0.15) {
+				if (Random.Range (0f, 1f) > 0) {
 					var go = Instantiate (TilePrefab);
 					go.name = "Tile (" + i + ", " + j + ")";
 					go.transform.position = new Vector3 (2 * (j) - columns, 2 * (-i) + rows, 0) + mapPosition;
 					map [i, j] = go.GetComponent<Tile> ();
+					map [i, j].gridPosition = new Vector2 (i, j);
 				}
 			}
 		}
@@ -247,6 +268,8 @@ public class GameManager : MonoBehaviour {
 			player = gobj.GetComponent<UserPlayer>();
 			player.setPlayerIndex (i);
 			userPlayers.Add (player);
+			player.gridPosition = new Vector2 (0, i);
+			map [(int)player.gridPosition.x, (int)player.gridPosition.y].playerOnTile = player;
 		}
 		currentPlayer = userPlayers [0];
 		for (int i = 0; i < 3; i++) {
@@ -259,8 +282,63 @@ public class GameManager : MonoBehaviour {
 			aiplayer = gobj2.GetComponent<AIPlayer> ();
 			aiplayer.setPlayerIndex (i);
 			aiPlayers.Add(aiplayer);
+			aiplayer.gridPosition = new Vector2 (rows - 1, columns - 1 - i);
+
+			map [(int)aiplayer.gridPosition.x, (int)aiplayer.gridPosition.y].playerOnTile = aiplayer;
 		}
 
+	}
+
+	public void aiMove(){
+
+		Debug.Log (currentPlayer.gameObject.name);
+		if (turn == 0)
+			return;
+
+		Player p = currentPlayer;
+		if (p.GetType () == typeof(UserPlayer)) {
+//			Debug.Log ("userplayer");
+			return;
+		} else {
+//			Debug.Log ("not userplayer");
+		}
+		Player target = attackableTarget (p);
+		if (target != null) {
+			p.attack (target);
+		}else {
+			Tile currentTile = tileUnderPlayer (p);
+			bool flag = false;
+			for (int i = 2; i >= 0; i--) {
+				if (flag)
+					break;
+				for (int j = 2; j >= 0; j--) {
+					
+					if ((int)currentTile.gridPosition.x - i >= 0 && (int)currentTile.gridPosition.y - j >= 0) {
+						Tile tile = map [(int)currentTile.gridPosition.x - i, (int)currentTile.gridPosition.y - j];
+						if (tile != null && tile.playerOnTile == null ){
+							moveCurrentPlayer (tile);
+							flag = true;
+							break;
+						}
+					}
+				}
+			}
+			p.moved = true;
+		}
+		Invoke("nextPlayer", 2f);
+	}
+
+	public Tile tileUnderPlayer(Player p){
+		return map [(int)p.gridPosition.x, (int)p.gridPosition.y];
+	}
+	public Player attackableTarget(Player p){
+		Tile[] neighbours = tileUnderPlayer(p).neighbors;
+		foreach (Tile tile in neighbours) {
+			if (tile != null && tile.playerOnTile != null && tile.playerOnTile.GetType() != p.GetType ()) {
+				return tile.playerOnTile;
+			}
+		}
+		return null;
 	}
 
 	public void enterBattleScene(Player self, Player enemy){
@@ -273,7 +351,6 @@ public class GameManager : MonoBehaviour {
 			activePlayer = enemy.gameObject;
 			activeEnemy = self.gameObject;
 		}
-
 		BattleManager.instance.setObjs (activePlayer, activeEnemy);
 
 		BattleManager.start = true;

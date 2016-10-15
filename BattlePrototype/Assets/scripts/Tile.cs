@@ -13,11 +13,13 @@ public enum Sides{
 public class Tile : MonoBehaviour {
 	public int autotileID;
 	public Tile[] neighbors = new Tile[4];
+	public Vector2 gridPosition = Vector2.zero;
+	public Player playerOnTile;
 	public void addNeighbor(Sides side, Tile tile){
 		neighbors [(int)side] = tile;
 		CalculateAutotileID ();
 	}
-    public Vector2 gridPosition = Vector2.zero;
+    
 	// Use this for initialization
 	void Start () {
 	
@@ -31,6 +33,7 @@ public class Tile : MonoBehaviour {
         //Debug.Log("My position is(" + gridPosition.x + " ," + gridPosition.y + ").");
     }
     void OnMouseDown() {
+		Debug.Log (this.gridPosition);
         GameManager.instance.moveCurrentPlayer(this);
     }
 	private void CalculateAutotileID(){
