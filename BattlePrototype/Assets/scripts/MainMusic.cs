@@ -3,9 +3,9 @@ using UnityEngine.UI;
 using System.Collections;
 
 public class MainMusic : MonoBehaviour {
-	public static bool play = true;
+	public static bool play = false;
 	public static int turnType = 1; // 0:both, 1:only left, 2:only right
-	public AudioSource bgm;
+//	public AudioSource bgm;
 	public float rotation = 0.0f;
 	public bool isRight;
 	public static int once = 1;
@@ -15,9 +15,9 @@ public class MainMusic : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		if (play) {
-			bgm.Play();
-		}
+//		if (play) {
+//			bgm.Play();
+//		}
 	}
 	
 	// Update is called once per frame

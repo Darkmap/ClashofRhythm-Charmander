@@ -8,15 +8,21 @@ using Random = UnityEngine.Random;
 public class BattleManager : MonoBehaviour {
 
 	public static BattleManager instance;
-	public static BattleManager getInstance() {
-		if (instance == null) {
-			instance = new BattleManager ();
-		}
-		return instance;
-	}
 
 	public GameObject userPrefab;
 	public GameObject enemyPrefab;
+
+	public void setObjs(GameObject userPrefab, GameObject enemyPrefab) {
+		this.userPrefab = userPrefab;
+		this.enemyPrefab = enemyPrefab;
+	}
+
+	public void resetBattle() {
+		playerHealthBar.fillAmount = 1f;
+		enemyHealthBar.fillAmount = 1f;
+		Destroy (userObj);
+		Destroy (enemyObj);
+	}
 
 	// Time progress
 	public Image progressBar;
@@ -61,10 +67,13 @@ public class BattleManager : MonoBehaviour {
 	***/ 
 
 	// States
+	public static bool start = false;
+	public static bool hasSet = false;
 	public static bool move_forward = false;
 	public static bool reverse = false;
 	public static bool move_back = false;
 	public static bool end = false;
+	public static bool ended = true;
 
 	// Performance
 	float performance = 0f;
@@ -139,19 +148,22 @@ public class BattleManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
-		Vector3 userScale = userObj.transform.localScale;
-		userObj.transform.localScale = new Vector3(userScale.x*2 , userScale.y*2, userScale.z*2);
-		Rigidbody userRb = userObj.GetComponent<Rigidbody>();
-		userAnimator = userObj.GetComponent<Animator>();
-		userRb.isKinematic = false;
 
-		enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
-		Vector3 enemyScale = enemyObj.transform.localScale;
-		enemyObj.transform.localScale = new Vector3(enemyScale.x*2 , enemyScale.y*2, enemyScale.z * 2);
-		Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
-		enemyAnimator = enemyObj.GetComponent<Animator>();
-		enemyRb.isKinematic = false;
+		instance = this;
+
+//		userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
+//		Vector3 userScale = userObj.transform.localScale;
+//		userObj.transform.localScale = new Vector3(userScale.x*2 , userScale.y*2, userScale.z*2);
+//		Rigidbody userRb = userObj.GetComponent<Rigidbody>();
+//		userAnimator = userObj.GetComponent<Animator>();
+//		userRb.isKinematic = false;
+//
+//		enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
+//		Vector3 enemyScale = enemyObj.transform.localScale;
+//		enemyObj.transform.localScale = new Vector3(enemyScale.x*2 , enemyScale.y*2, enemyScale.z * 2);
+//		Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
+//		enemyAnimator = enemyObj.GetComponent<Animator>();
+//		enemyRb.isKinematic = false;
 	}
 
 
@@ -314,11 +326,13 @@ public class BattleManager : MonoBehaviour {
 			end = true;
 			userObj.SetActive (false);
 			// TODO remove player unit
+			GameManager.instance.destoryCurrentPlayer();
 		} 
 		if (enemyHealthBar.fillAmount <= 0.01f) {
 			end = true;
 			enemyObj.SetActive (false);
 			// TODO remove enemy unit
+			GameManager.instance.destoryCurrentEnermy();
 		}
 		if (end) {
 			move_forward = false;
@@ -329,7 +343,7 @@ public class BattleManager : MonoBehaviour {
 
 	void attack_round() {
 		if (!move_forward && !reverse && !move_back) {
-//			Debug.Log (MusicParameters.count);
+			Debug.Log (MusicParameters.count);
 			if (MusicParameters.count >= 10) {
 				performance = MusicParameters.getPortion ();
 				move_forward = true;
@@ -369,10 +383,33 @@ public class BattleManager : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-		if (end) {
-			// TODO call something to end this game
+		if (start && !hasSet) {
+			userObj = (GameObject)Instantiate(userPrefab, playerLocation, Quaternion.Euler(new Vector3()));
+			Vector3 userScale = userObj.transform.localScale;
+			userObj.transform.localScale = new Vector3(userScale.x*2 , userScale.y*2, userScale.z*2);
+			Rigidbody userRb = userObj.GetComponent<Rigidbody>();
+			userAnimator = userObj.GetComponent<Animator>();
+			userRb.isKinematic = false;
+
+			enemyObj = (GameObject)Instantiate(enemyPrefab, enemyLocation, Quaternion.Euler(new Vector3(0, 180, 0)));
+			Vector3 enemyScale = enemyObj.transform.localScale;
+			enemyObj.transform.localScale = new Vector3(enemyScale.x*2 , enemyScale.y*2, enemyScale.z * 2);
+			Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
+			enemyAnimator = enemyObj.GetComponent<Animator>();
+			enemyRb.isKinematic = false;
+
+			start = false;
+			hasSet = true;
 		} else {
-			attack_round ();
+			if (ended) {
+				// Empty
+			} else if (end) {
+				GameManager.instance.backToBoard();
+				resetBattle ();
+				ended = true;
+			} else {
+				attack_round ();
+			}
 		}
 	}
 }

@@ -21,6 +21,13 @@ public class GameManager : MonoBehaviour {
 	[Header("Map Sprites")]
 	public Texture2D islandTexture;
 
+	public GameObject activePlayer;
+	public GameObject activeEnemy;
+
+	//BGM
+	public AudioSource bgm1;
+	public AudioSource bgm2;
+
 	//Camera
 	public GameObject battleCamera; 
 	public GameObject boardCamera;
@@ -258,20 +265,29 @@ public class GameManager : MonoBehaviour {
 
 	public void enterBattleScene(Player self, Player enemy){
 		Debug.Log ("Battle Start!");
-		//battleUI.gameObject.SetActive(true);
-		//battleCamera.SetActive (true);
-		//boardCamera.SetActive (false);
-		GameObject activePlayer;
-		GameObject activeEnemy;
-		if (self.GetType() == typeof(UserPlayer)){
+
+		if (self.GetType () == typeof(UserPlayer)) {
 			activePlayer = self.gameObject;
 			activeEnemy = enemy.gameObject;
 		} else {
 			activePlayer = enemy.gameObject;
 			activeEnemy = self.gameObject;
 		}
-		Debug.Log ("p: " +activePlayer.name);
-		Debug.Log ("p: " +activeEnemy.name);
+
+		BattleManager.instance.setObjs (activePlayer, activeEnemy);
+
+		BattleManager.start = true;
+		BattleManager.hasSet = false;
+		BattleManager.end = false;
+		BattleManager.ended = false;
+
+		battleUI.gameObject.SetActive(true);
+		battleCamera.SetActive (true);
+		boardCamera.SetActive (false);
+
+		bgm1.Stop ();
+		bgm2.Play ();
+		MainMusic.play = true;
 	}
 
 	// Use this for initialization
@@ -284,6 +300,32 @@ public class GameManager : MonoBehaviour {
 
 	void Start () {
 	
+	}
+
+	public void destoryCurrentPlayer() {
+		activePlayer.SetActive (false);
+		removeFromPlayerList (activePlayer);
+	}
+	public void destoryCurrentEnermy() {
+		activeEnemy.SetActive (false);
+		removeFromPlayerList (activeEnemy);
+	}
+
+	public void backToBoard() {
+		BattleManager.start = false;
+		BattleManager.hasSet = false;
+
+		MainMusic.play = false;
+
+		bgm1.Play ();
+		bgm2.Stop ();
+
+		Debug.Log (bgm1);
+		Debug.Log (bgm2);
+
+		battleUI.gameObject.SetActive(false);
+		battleCamera.SetActive (false);
+		boardCamera.SetActive (true);
 	}
 	
 	// Update is called once per frame
