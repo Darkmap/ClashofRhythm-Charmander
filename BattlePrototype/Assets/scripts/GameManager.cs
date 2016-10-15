@@ -27,6 +27,8 @@ public class GameManager : MonoBehaviour {
 
 	//UI
 	public Text boardText;
+	public Text playerUnit;
+	public Text enemyUnit;
 
 	//BGM
 	public AudioSource bgm1;
@@ -421,7 +423,7 @@ public class GameManager : MonoBehaviour {
 			Invoke ("nextPlayer", 4f);
 		}
 	}
-	
+
 	// Update is called once per frame
 	void Update () {
 		foreach(Player p in userPlayers){
@@ -430,9 +432,17 @@ public class GameManager : MonoBehaviour {
 		foreach(Player p in aiPlayers){
 			p.TurnUpdate ();
 		}
-		boardText.text = ((turn == 0)
+		playerUnit.text = "Player Unit\n" + userPlayers.Count;
+		enemyUnit.text = "Enemy Unit\n" + aiPlayers.Count;
+
+		if (userPlayers.Count == 0) {
+			boardText.text = "Defeated :(";
+		} else if (userPlayers.Count == 0) {
+			boardText.text = "Victory :)";
+		} else {boardText.text = ((turn == 0)
 			? "Player's Turn: "
 			: "Enemy's Turn:")
-			+ "Moving " + currentPlayer.gameObject.name.Substring(0, currentPlayer.gameObject.name.IndexOf('(')).ToUpperInvariant();
+				+ "Moving " + currentPlayer.gameObject.name.Substring(0, currentPlayer.gameObject.name.IndexOf('(')).ToUpperInvariant();
+		}
 	}
 }

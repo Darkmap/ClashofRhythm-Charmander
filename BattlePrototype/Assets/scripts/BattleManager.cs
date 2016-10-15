@@ -313,11 +313,11 @@ public class BattleManager : MonoBehaviour {
 	void doingAttack() {
 		switch (performanceType) {
 		case 1:
-			playerHealthBar.fillAmount -= 0.2f;
+			playerHealthBar.fillAmount -= 0.4f;
 			break;
 		case 2:
-			playerHealthBar.fillAmount -= 0.1f;
-			enemyHealthBar.fillAmount -= 0.1f;
+			playerHealthBar.fillAmount -= 0.2f;
+			enemyHealthBar.fillAmount -= 0.2f;
 			break;
 		case 3:
 			enemyHealthBar.fillAmount -= 0.2f;
