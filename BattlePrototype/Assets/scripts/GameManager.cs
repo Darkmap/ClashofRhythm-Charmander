@@ -187,8 +187,19 @@ public class GameManager : MonoBehaviour {
 		if (!p.moved) {
 			if (mDistance (p.moveDestination, destTile.transform.position) <= p.steps) {
 				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, -1);
+
 				p.moved = true;
 				map [(int)p.gridPosition.x, (int)p.gridPosition.y].playerOnTile = null;
+				Debug.Log (p.transform.localRotation.y);
+				if ((destTile.gridPosition.y - p.gridPosition.y) * p.leftright < 0) {
+					p.leftright *= -1;
+
+					if (p.transform.localRotation.y == 1) {
+						p.transform.localRotation = Quaternion.Euler (0, 0, 0);
+					} else {
+						p.transform.localRotation = Quaternion.Euler (0, 180, 0);
+					}
+				}
 				p.gridPosition = destTile.gridPosition;
 				destTile.playerOnTile = p;
 				if (isTurnOver ()) {
@@ -279,7 +290,6 @@ public class GameManager : MonoBehaviour {
 		for (int i = 0; i < 3; i++) {
 			UserPlayer player;
 			GameObject gobj = (GameObject)Instantiate(playerUnitPrefabs[i], new Vector3(2*(i) - columns, 0 + rows, -1) + mapPosition, Quaternion.Euler(new Vector3()));
-
 			Vector3 userScale = gobj.transform.localScale;
 			gobj.transform.localScale = new Vector3(userScale.x*1.5f , userScale.y*1.5f, userScale.z*1.5f);
 
@@ -330,7 +340,7 @@ public class GameManager : MonoBehaviour {
 					
 					if ((int)currentTile.gridPosition.x - i >= 0 && (int)currentTile.gridPosition.y - j >= 0) {
 						Tile tile = map [(int)currentTile.gridPosition.x - i, (int)currentTile.gridPosition.y - j];
-						if (tile != null && tile.playerOnTile == null ){
+						if (tile != null && tile.playerOnTile == null){
 							moveCurrentPlayer (tile);
 							flag = true;
 							break;
