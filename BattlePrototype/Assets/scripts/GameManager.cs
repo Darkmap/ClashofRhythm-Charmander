@@ -30,6 +30,12 @@ public class GameManager : MonoBehaviour {
 	public Text playerUnit;
 	public Text enemyUnit;
 
+	public GameObject white_triangle;
+	public GameObject red_triangle;
+	public GameObject green_triangle;
+
+	public GameObject currentTri;
+
 	//BGM
 	public AudioSource bgm1;
 	public AudioSource bgm2;
@@ -78,7 +84,27 @@ public class GameManager : MonoBehaviour {
 	public int enemyCount;
 
 	public void setCurrentPlayer(Player p){
+
+		if (this.currentTri != null) {
+			Debug.Log ("currentTri != null");
+			Destroy (this.currentTri.gameObject);
+		} else {
+			Debug.Log ("currentTri == null");
+		}
 		currentPlayer = p;
+		this.currentTri = (GameObject)Instantiate(white_triangle);
+		this.currentTri.transform.parent = currentPlayer.gameObject.transform;
+		float xScale = this.currentTri.transform.localScale.x / 0.13f;
+		float yScale = this.currentTri.transform.localScale.y / 0.13f;
+		this.currentTri.transform.localPosition = new Vector3 (-0.06f * xScale, 0.27f * yScale, 0);
+	}
+
+	public void putTriangle(GameObject unit, GameObject triangle) {
+		GameObject triObj = (GameObject)Instantiate(triangle);
+		triObj.transform.parent = unit.gameObject.transform;
+		float xScale = triObj.transform.localScale.x / 0.13f;
+		float yScale = triObj.transform.localScale.y / 0.13f;
+		triObj.transform.localPosition = new Vector3 (-0.06f * xScale, 0.27f * yScale, 0);
 	}
 
 	public Player getCurrentPlayer(){
@@ -151,7 +177,9 @@ public class GameManager : MonoBehaviour {
 				unit.moved = false;
 			}
 			turn = 1;
-			currentPlayer = aiPlayers [0];
+//			currentPlayer = aiPlayers [0];
+			setCurrentPlayer(aiPlayers [0]);
+
 			Debug.Log ("AI's turn start.");
 			aiMove ();
 		} else if (turn == 1) {
@@ -159,7 +187,8 @@ public class GameManager : MonoBehaviour {
 				unit.moved = false;
 			}
 			turn = 0;
-			currentPlayer = userPlayers [0];
+//			currentPlayer = userPlayers [0];
+			setCurrentPlayer(userPlayers [0]);
 			Debug.Log ("User's turn start.");
 		}
 	}
@@ -169,7 +198,8 @@ public class GameManager : MonoBehaviour {
 		if (turn == 1) {
 			foreach (AIPlayer unit in aiPlayers) {
 				if (!unit.moved) {
-					currentPlayer = unit;
+//					currentPlayer = unit;
+					setCurrentPlayer(unit);
 					aiMove ();
 					return;
 				}
@@ -288,8 +318,11 @@ public class GameManager : MonoBehaviour {
 			userPlayers.Add (player);
 			player.gridPosition = new Vector2 (0, i);
 			map [(int)player.gridPosition.x, (int)player.gridPosition.y].playerOnTile = player;
+
+			putTriangle (gobj, green_triangle);
+
 		}
-		currentPlayer = userPlayers [0];
+//		currentPlayer = userPlayers [0];
 		for (int i = 0; i < 3; i++) {
 			AIPlayer aiplayer;
 			GameObject gobj2 = (GameObject)Instantiate(aiUnitPrefabs[i], new Vector3(- 2 * i + columns - 2 , 2-rows, -1) + mapPosition, Quaternion.Euler(new Vector3(0, 180, 0)));
@@ -303,8 +336,10 @@ public class GameManager : MonoBehaviour {
 			aiplayer.gridPosition = new Vector2 (rows - 1, columns - 1 - i);
 
 			map [(int)aiplayer.gridPosition.x, (int)aiplayer.gridPosition.y].playerOnTile = aiplayer;
-		}
 
+			putTriangle (gobj2, red_triangle);
+		}
+		setCurrentPlayer (userPlayers [0]);
 	}
 
 	public void aiMove(){
@@ -387,6 +422,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Awake () {
+		currentTri = null;
 		instance = this;
 		initTurn ();
 		generateMap();
