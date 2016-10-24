@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour {
 	public Text playerUnit;
 	public Text enemyUnit;
 
+	public GameObject currentPlayerHeadshot;
+	public GameObject currentAIHeadshot;
+
 	public GameObject white_triangle;
 	public GameObject red_triangle;
 	public GameObject green_triangle;
@@ -97,6 +100,24 @@ public class GameManager : MonoBehaviour {
 		float xScale = this.currentTri.transform.localScale.x / 0.13f;
 		float yScale = this.currentTri.transform.localScale.y / 0.13f;
 		this.currentTri.transform.localPosition = new Vector3 (-0.06f * xScale, 0.27f * yScale, 0);
+
+
+		if (turn == 0) {
+			if (currentPlayerHeadshot != null) {
+				Destroy (currentPlayerHeadshot);
+				currentPlayerHeadshot = null;
+			}
+			currentPlayerHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -495, 0), Quaternion.Euler (new Vector3 ()));
+			BattleManager.destryAllChildren (currentPlayerHeadshot.gameObject.transform);
+		} else {
+			if (currentAIHeadshot != null) {
+				Destroy (currentAIHeadshot);
+				currentAIHeadshot = null;
+			}
+			currentAIHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -502, 0), Quaternion.Euler (new Vector3 ()));
+			BattleManager.destryAllChildren (currentAIHeadshot.gameObject.transform);
+		}
+
 	}
 
 	public void putTriangle(GameObject unit, GameObject triangle) {
@@ -325,6 +346,7 @@ public class GameManager : MonoBehaviour {
 
 			player = gobj.GetComponent<UserPlayer>();
 			player.setPlayerIndex (i);
+			player.leftright = 1;
 			userPlayers.Add (player);
 			player.gridPosition = new Vector2 (0, i);
 			map [(int)player.gridPosition.x, (int)player.gridPosition.y].playerOnTile = player;
@@ -342,6 +364,7 @@ public class GameManager : MonoBehaviour {
 
 			aiplayer = gobj2.GetComponent<AIPlayer> ();
 			aiplayer.setPlayerIndex (i);
+			aiplayer.leftright = -1;
 			aiPlayers.Add(aiplayer);
 			aiplayer.gridPosition = new Vector2 (rows - 1, columns - 1 - i);
 
@@ -478,17 +501,18 @@ public class GameManager : MonoBehaviour {
 		foreach(Player p in aiPlayers){
 			p.TurnUpdate ();
 		}
-		playerUnit.text = "Player Unit\n" + userPlayers.Count;
-		enemyUnit.text = "Enemy Unit\n" + aiPlayers.Count;
+//		playerUnit.text = "Player Unit\n" + userPlayers.Count;
+
+//		enemyUnit.text = "Enemy Unit\n" + aiPlayers.Count;
 
 		if (userPlayers.Count == 0) {
 			boardText.text = "Defeated :(";
 		} else if (aiPlayers.Count == 0) {
 			boardText.text = "Victory :)";
 		} else {boardText.text = ((turn == 0)
-			? "Player's Turn: "
-			: "Enemy's Turn:")
-				+ "Moving " + currentPlayer.gameObject.name.Substring(0, currentPlayer.gameObject.name.IndexOf('(')).ToUpperInvariant();
+			? "Player's Turn"
+			: "Enemy's Turn");
+//				+ "Moving " + currentPlayer.gameObject.name.Substring(0, currentPlayer.gameObject.name.IndexOf('(')).ToUpperInvariant();
 		}
 	}
 }

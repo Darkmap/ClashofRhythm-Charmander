@@ -386,6 +386,12 @@ public class BattleManager : MonoBehaviour {
 	}
 
 
+	static public void destryAllChildren(Transform transform) {
+		var children = new List<GameObject>();
+		foreach (Transform child in transform) children.Add(child.gameObject);
+		children.ForEach(child => Destroy(child));
+	}
+
 	// Update is called once per frame
 	void Update () {
 		if (start && !hasSet) {
@@ -402,6 +408,10 @@ public class BattleManager : MonoBehaviour {
 			Rigidbody enemyRb = enemyObj.GetComponent<Rigidbody>();
 			enemyAnimator = enemyObj.GetComponent<Animator>();
 			enemyRb.isKinematic = false;
+
+			// Destroy triangles
+			destryAllChildren (userObj.gameObject.transform);
+			destryAllChildren (enemyObj.gameObject.transform);
 
 			start = false;
 			hasSet = true;
