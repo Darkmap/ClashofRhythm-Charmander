@@ -107,14 +107,14 @@ public class GameManager : MonoBehaviour {
 				Destroy (currentPlayerHeadshot);
 				currentPlayerHeadshot = null;
 			}
-			currentPlayerHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -495, 0), Quaternion.Euler (new Vector3 ()));
+			currentPlayerHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -494, 0), Quaternion.Euler (new Vector3 ()));
 			BattleManager.destryAllChildren (currentPlayerHeadshot.gameObject.transform);
 		} else {
 			if (currentAIHeadshot != null) {
 				Destroy (currentAIHeadshot);
 				currentAIHeadshot = null;
 			}
-			currentAIHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -502, 0), Quaternion.Euler (new Vector3 ()));
+			currentAIHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -501, 0), Quaternion.Euler (new Vector3 ()));
 			BattleManager.destryAllChildren (currentAIHeadshot.gameObject.transform);
 		}
 
