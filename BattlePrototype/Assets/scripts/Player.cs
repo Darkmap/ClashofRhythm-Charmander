@@ -7,12 +7,14 @@ public class Player : MonoBehaviour {
     public Vector3 moveDestination;
 	public int playerIndex;
 	public int steps;
+	public float health;
 	public bool moved;
 	// 1 for right, -1 for left
 	public int leftright;
 	public int unitClass= 0;
 	public Vector2 gridPosition = Vector2.zero;
     void Awake() {
+		health = 1.0f;
 		moved = false;
         moveDestination = transform.position;
     }

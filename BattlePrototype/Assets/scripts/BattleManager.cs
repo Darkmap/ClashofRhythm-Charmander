@@ -98,6 +98,12 @@ public class BattleManager : MonoBehaviour {
 	public AudioSource gunSound;
 	public AudioSource arrowSound;
 
+
+	public void setHealth (float playerHealth, float enemyHealth) {
+		playerHealthBar.fillAmount = playerHealth;
+		enemyHealthBar.fillAmount = enemyHealth;
+	}
+
 	public void playFightSound() {
 		fightSound.Play ();
 		Invoke ("stopPlayFightSound", 1f);
@@ -328,6 +334,15 @@ public class BattleManager : MonoBehaviour {
 		default:
 			break;
 		}
+
+		Player userPlayer = GameManager.instance.activePlayer.GetComponent<Player> ();
+		userPlayer.health = playerHealthBar.fillAmount;
+		GameManager.instance.palyerHealth.fillAmount = userPlayer.health;
+
+		Player aiPlayer = GameManager.instance.activeEnemy.GetComponent<Player> ();
+		aiPlayer.health = enemyHealthBar.fillAmount;
+		GameManager.instance.enemyHealth.fillAmount = aiPlayer.health;
+
 		if (playerHealthBar.fillAmount <= 0.01f) {
 			end = true;
 			userObj.SetActive (false);

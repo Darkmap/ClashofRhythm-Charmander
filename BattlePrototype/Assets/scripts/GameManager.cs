@@ -30,6 +30,9 @@ public class GameManager : MonoBehaviour {
 	public Text playerUnit;
 	public Text enemyUnit;
 
+	public Image palyerHealth;
+	public Image enemyHealth;
+
 	public GameObject currentPlayerHeadshot;
 	public GameObject currentAIHeadshot;
 
@@ -107,17 +110,16 @@ public class GameManager : MonoBehaviour {
 				Destroy (currentPlayerHeadshot);
 				currentPlayerHeadshot = null;
 			}
-			currentPlayerHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -494, 0), Quaternion.Euler (new Vector3 ()));
+			currentPlayerHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -495, 0), Quaternion.Euler (new Vector3 ()));
 			BattleManager.destryAllChildren (currentPlayerHeadshot.gameObject.transform);
 		} else {
 			if (currentAIHeadshot != null) {
 				Destroy (currentAIHeadshot);
 				currentAIHeadshot = null;
 			}
-			currentAIHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -501, 0), Quaternion.Euler (new Vector3 ()));
+			currentAIHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -502, 0), Quaternion.Euler (new Vector3 ()));
 			BattleManager.destryAllChildren (currentAIHeadshot.gameObject.transform);
 		}
-
 	}
 
 	public void putTriangle(GameObject unit, GameObject triangle) {
@@ -432,9 +434,11 @@ public class GameManager : MonoBehaviour {
 		if (self.GetType () == typeof(UserPlayer)) {
 			activePlayer = self.gameObject;
 			activeEnemy = enemy.gameObject;
+			BattleManager.instance.setHealth (self.health, enemy.health);
 		} else {
 			activePlayer = enemy.gameObject;
 			activeEnemy = self.gameObject;
+			BattleManager.instance.setHealth (enemy.health, self.health);
 		}
 		BattleManager.instance.setObjs (activePlayer, activeEnemy);
 
@@ -451,6 +455,19 @@ public class GameManager : MonoBehaviour {
 		bgm1.Stop ();
 		bgm2.Play ();
 		MainMusic.play = true;
+
+		if (currentPlayerHeadshot != null) {
+			Destroy (currentPlayerHeadshot);
+			currentPlayerHeadshot = null;
+		}
+		currentPlayerHeadshot = (GameObject)Instantiate (activePlayer, new Vector3(-491, -495, 0), Quaternion.Euler (new Vector3 ()));
+		BattleManager.destryAllChildren (currentPlayerHeadshot.gameObject.transform);
+		if (currentAIHeadshot != null) {
+			Destroy (currentAIHeadshot);
+			currentAIHeadshot = null;
+		}
+		currentAIHeadshot = (GameObject)Instantiate (activeEnemy, new Vector3(-491, -502, 0), Quaternion.Euler (new Vector3 ()));
+		BattleManager.destryAllChildren (currentAIHeadshot.gameObject.transform);
 	}
 
 	// Use this for initialization
@@ -501,9 +518,15 @@ public class GameManager : MonoBehaviour {
 		foreach(Player p in aiPlayers){
 			p.TurnUpdate ();
 		}
-//		playerUnit.text = "Player Unit\n" + userPlayers.Count;
+//		playerUnit.text = "Player\n" + userPlayers.Count;
+//
+//		enemyUnit.text = "Enemy\n" + aiPlayers.Count;
 
-//		enemyUnit.text = "Enemy Unit\n" + aiPlayers.Count;
+		if (turn == 0) {
+			palyerHealth.fillAmount = currentPlayer.health;
+		} else {
+			enemyHealth.fillAmount = currentPlayer.health;
+		}
 
 		if (userPlayers.Count == 0) {
 			boardText.text = "Defeated :(";
