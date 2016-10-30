@@ -12,6 +12,9 @@ public class BattleManager : MonoBehaviour {
 	public GameObject userPrefab;
 	public GameObject enemyPrefab;
 
+	public Player userPlayer;
+	public Player enemyPlayer;
+
 	public void setObjs(GameObject userPrefab, GameObject enemyPrefab) {
 		this.userPrefab = userPrefab;
 		this.enemyPrefab = enemyPrefab;
@@ -317,31 +320,33 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	void doingAttack() {
+
+
+
 		switch (performanceType) {
 		case 1:
-			playerHealthBar.fillAmount -= 0.4f;
+			playerHealthBar.fillAmount -= 0.4f * enemyPlayer.strength;
 			break;
 		case 2:
-			playerHealthBar.fillAmount -= 0.2f;
-			enemyHealthBar.fillAmount -= 0.2f;
+			playerHealthBar.fillAmount -= 0.2f * enemyPlayer.strength;
+			enemyHealthBar.fillAmount -= 0.2f * userPlayer.strength;
 			break;
 		case 3:
-			enemyHealthBar.fillAmount -= 0.2f;
+			enemyHealthBar.fillAmount -= 0.2f * userPlayer.strength;
 			break;
 		case 4:
-			enemyHealthBar.fillAmount -= 0.4f;
+			enemyHealthBar.fillAmount -= 0.4f * userPlayer.strength;
 			break;
 		default:
 			break;
 		}
 
-		Player userPlayer = GameManager.instance.activePlayer.GetComponent<Player> ();
+
 		userPlayer.health = playerHealthBar.fillAmount;
 		GameManager.instance.palyerHealth.fillAmount = userPlayer.health;
 
-		Player aiPlayer = GameManager.instance.activeEnemy.GetComponent<Player> ();
-		aiPlayer.health = enemyHealthBar.fillAmount;
-		GameManager.instance.enemyHealth.fillAmount = aiPlayer.health;
+		enemyPlayer.health = enemyHealthBar.fillAmount;
+		GameManager.instance.enemyHealth.fillAmount = enemyPlayer.health;
 
 		if (playerHealthBar.fillAmount <= 0.01f) {
 			end = true;
@@ -427,6 +432,9 @@ public class BattleManager : MonoBehaviour {
 			// Destroy triangles
 			destryAllChildren (userObj.gameObject.transform);
 			destryAllChildren (enemyObj.gameObject.transform);
+
+			userPlayer = GameManager.instance.activePlayer.GetComponent<Player> ();
+			enemyPlayer = GameManager.instance.activeEnemy.GetComponent<Player> ();
 
 			start = false;
 			hasSet = true;

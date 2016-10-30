@@ -33,6 +33,10 @@ public class GameManager : MonoBehaviour {
 	public Image palyerHealth;
 	public Image enemyHealth;
 
+
+	public Image palyerStrength;
+	public Image enemyStrength;
+
 	public GameObject currentPlayerHeadshot;
 	public GameObject currentAIHeadshot;
 
@@ -524,8 +528,10 @@ public class GameManager : MonoBehaviour {
 
 		if (turn == 0) {
 			palyerHealth.fillAmount = currentPlayer.health;
+			palyerStrength.fillAmount = currentPlayer.strength;
 		} else {
 			enemyHealth.fillAmount = currentPlayer.health;
+			enemyStrength.fillAmount = currentPlayer.strength;
 		}
 
 		if (userPlayers.Count == 0) {

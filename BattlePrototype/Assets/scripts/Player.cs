@@ -8,13 +8,20 @@ public class Player : MonoBehaviour {
 	public int playerIndex;
 	public int steps;
 	public float health;
+	public float strength;
 	public bool moved;
 	// 1 for right, -1 for left
 	public int leftright;
 	public int unitClass= 0;
 	public Vector2 gridPosition = Vector2.zero;
     void Awake() {
-		health = 1.0f;
+//		health = 1.0f;
+		if(health <= 0.01f){
+			health = 1f;
+		}
+		if(strength <= 0.01f){
+			strength = 0.5f;
+		}
 		moved = false;
         moveDestination = transform.position;
     }
