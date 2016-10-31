@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
 	public Image palyerHealth;
 	public Image enemyHealth;
 
+	public Button endRoundBtn;
 
 	public Image palyerStrength;
 	public Image enemyStrength;
@@ -218,6 +219,7 @@ public class GameManager : MonoBehaviour {
 			setCurrentPlayer(userPlayers [0]);
 			Debug.Log ("User's turn start.");
 		}
+		endRoundBtn.interactable = (turn == 0);
 	}
 
 	public void nextPlayer(){
@@ -481,6 +483,12 @@ public class GameManager : MonoBehaviour {
 		initTurn ();
 		generateMap();
 		generatePlayer();
+
+		endRoundBtn.onClick.AddListener (() => {
+			if(turn==0) {
+				nextTurn();
+			}
+		});
 	}
 
 	void Start () {
