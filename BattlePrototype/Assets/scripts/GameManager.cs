@@ -265,6 +265,7 @@ public class GameManager : MonoBehaviour {
 				destTile.playerOnTile = p;
 				if (isTurnOver ()) {
 					Debug.Log ("moveCurrentPlayer");
+					endRoundBtn.interactable = false;
 					Invoke("nextTurn",  4);
 				}
 			}
@@ -557,13 +558,15 @@ public class GameManager : MonoBehaviour {
 	
 	}
 
-	public void destoryCurrentPlayer() {
-		activePlayer.SetActive (false);
+	public void destroyCurrentPlayer() {
+		tileUnderPlayer (activePlayer.GetComponent<UserPlayer> ()).playerOnTile = null;
 		removeFromPlayerList (activePlayer);
+		activePlayer.SetActive (false);
 	}
-	public void destoryCurrentEnermy() {
-		activeEnemy.SetActive (false);
+	public void destroyCurrentEnermy() {
+		tileUnderPlayer (activeEnemy.GetComponent<AIPlayer> ()).playerOnTile = null;
 		removeFromPlayerList (activeEnemy);
+		activeEnemy.SetActive (false);
 	}
 
 	public void backToBoard() {
@@ -578,6 +581,7 @@ public class GameManager : MonoBehaviour {
 		Debug.Log ("backToBoard");
 
 		if (isTurnOver ()) {
+			endRoundBtn.interactable = false;
 			Invoke ("nextTurn", 4f);
 		} else {
 			Invoke ("nextPlayer", 4f);

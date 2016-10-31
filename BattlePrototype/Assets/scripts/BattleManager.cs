@@ -351,14 +351,15 @@ public class BattleManager : MonoBehaviour {
 		if (playerHealthBar.fillAmount <= 0.01f) {
 			end = true;
 			userObj.SetActive (false);
-			GameManager.instance.destoryCurrentPlayer();
+			GameManager.instance.destroyCurrentPlayer();
 		} 
 		if (enemyHealthBar.fillAmount <= 0.01f) {
 			end = true;
 			enemyObj.SetActive (false);
-			GameManager.instance.destoryCurrentEnermy();
+			GameManager.instance.destroyCurrentEnermy();
 		}
 		if (end) {
+			GameManager.instance.undisplayMoveableGrids ();
 			move_forward = false;
 			reverse = false;
 			move_back = false;
