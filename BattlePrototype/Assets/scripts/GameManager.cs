@@ -318,20 +318,20 @@ public class GameManager : MonoBehaviour {
 				if (tile == null)
 					continue;
 				var spriteID = tile.autotileID;
-				if (spriteID == 15 && r > 0.9f)
-					spriteID = 16;
-				else if (spriteID == 15 && r > 0.8f)
-					spriteID = 17;
+//				if (spriteID == 15 && r > 0.9f)
+//					spriteID = 16;
+//				else if (spriteID == 15 && r > 0.8f)
+//					spriteID = 17;
 				if (spriteID >= 0) {
 					var sr = tile.gameObject.GetComponent<SpriteRenderer> ();
 					sr.sprite = terrain_sprites [spriteID];
 				}
 			}
 		}
-		Tile tile0 = map[0,0];
-		Tile tilen = map [rows - 1, columns - 1];
-		tile0.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
-		tilen.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
+//		Tile tile0 = map[0,0];
+//		Tile tilen = map [rows - 1, columns - 1];
+//		tile0.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
+//		tilen.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
 	}
 
 	void generatePlayer() {

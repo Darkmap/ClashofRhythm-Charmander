@@ -8,6 +8,7 @@ public class UserPlayer : Player {
 	// Use this for initialization
 	void Start () {
 		animator = this.gameObject.GetComponent<Animator>();
+		leftright = 1;
 	}
 	
 	// Update is called once per frame
