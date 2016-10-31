@@ -117,6 +117,8 @@ public class GameManager : MonoBehaviour {
 			}
 			currentPlayerHeadshot = (GameObject)Instantiate (currentPlayer.gameObject, new Vector3(-491, -495, 0), Quaternion.Euler (new Vector3 ()));
 			BattleManager.destryAllChildren (currentPlayerHeadshot.gameObject.transform);
+			undisplayMoveableGrids ();
+			displayMoveableGrids (p);
 		} else {
 			if (currentAIHeadshot != null) {
 				Destroy (currentAIHeadshot);
@@ -246,7 +248,7 @@ public class GameManager : MonoBehaviour {
 		if (!p.moved) {
 			if (mDistance (p.moveDestination, destTile.transform.position) <= p.steps) {
 				p.moveDestination = destTile.transform.position + new Vector3 (0, 0, -1);
-
+				undisplayMoveableGrids ();
 				p.moved = true;
 				map [(int)p.gridPosition.x, (int)p.gridPosition.y].playerOnTile = null;
 				Debug.Log (p.transform.localRotation.y);
@@ -318,20 +320,20 @@ public class GameManager : MonoBehaviour {
 				if (tile == null)
 					continue;
 				var spriteID = tile.autotileID;
-//				if (spriteID == 15 && r > 0.9f)
-//					spriteID = 16;
-//				else if (spriteID == 15 && r > 0.8f)
-//					spriteID = 17;
+				if (spriteID == 15 && r > 0.9f)
+					spriteID = 16;
+				else if (spriteID == 15 && r > 0.8f)
+					spriteID = 17;
 				if (spriteID >= 0) {
 					var sr = tile.gameObject.GetComponent<SpriteRenderer> ();
 					sr.sprite = terrain_sprites [spriteID];
 				}
 			}
 		}
-//		Tile tile0 = map[0,0];
-//		Tile tilen = map [rows - 1, columns - 1];
-//		tile0.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
-//		tilen.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
+		Tile tile0 = map[0,0];
+		Tile tilen = map [rows - 1, columns - 1];
+		tile0.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
+		tilen.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
 	}
 
 	void generatePlayer() {
@@ -381,6 +383,7 @@ public class GameManager : MonoBehaviour {
 			putTriangle (gobj2, red_triangle);
 		}
 		setCurrentPlayer (userPlayers [0]);
+
 	}
 
 	public void aiMove(){
@@ -418,6 +421,65 @@ public class GameManager : MonoBehaviour {
 		}
 		if (!battleCamera.activeSelf) {
 			Invoke ("nextPlayer", 4f);
+		}
+	}
+
+	public void displayMoveableGrids(Player p){
+		colorChangeBFS ((int)p.gridPosition.x, (int)p.gridPosition.y, p.steps / 2);
+		Debug.Log ("grid position: " + p.gridPosition);
+	}
+
+	public void colorChangeBFS(int x, int y, int n){
+		int[,] visited = new int[rows, columns];
+		Queue<int[]> queue = new Queue<int[]> ();
+		queue.Enqueue(new int[2]{x, y});
+		for (int i = 0; i <= n; i++) {
+			int length = queue.Count;
+			for (int j = 0; j < length; j++) {
+				int[] pair = queue.Dequeue();
+				int xx = pair [0];
+				int yy = pair [1];
+				if (xx == 0 && yy == 3) {
+					Debug.Log (xx + "," + yy);
+					Debug.Log (i);
+				}
+				if (xx < 0 || yy < 0 || xx >= rows || yy >= columns || visited [xx, yy] > 0) {
+					continue;
+				}
+				Tile curTile = map[xx, yy];
+				if (curTile.playerOnTile != null) {
+					if (curTile.playerOnTile == currentPlayer) {
+						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.yellow);
+					} else {
+						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.red);
+					}
+				} else {
+					curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.green);
+				}
+				visited[xx, yy] = 1;
+				queue.Enqueue(new int[2]{xx + 1, yy});
+				queue.Enqueue(new int[2]{xx - 1, yy});
+				queue.Enqueue(new int[2]{xx, yy + 1});
+				queue.Enqueue(new int[2]{xx, yy - 1});
+			}
+
+		}
+		//turn color
+//		Tile curTile = map[x, y];
+//		if (curTile.playerOnTile != null) {
+//			curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.red);
+//		} else {
+//			curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.green);
+//		}
+
+
+	}
+
+	public void undisplayMoveableGrids(){
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < columns; j++) {
+				map [i, j].gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.white);
+			}
 		}
 	}
 
