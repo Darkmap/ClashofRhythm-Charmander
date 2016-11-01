@@ -1,0 +1,20 @@
+fileFormatVersion: 2
+guid: 50cd6bdfc29b145e7a77c0302a67ea2c
+timeCreated: 1476141834
+licenseType: Free
+MonoImporter:
+  serializedVersion: 2
+  defaultReferences:
+  - islandTexture: {fileID: 2800000, guid: 59a3bfce50bb74d03833708d8e2fd364, type: 3}
+  - battleCamera: {instanceID: 0}
+  - boardCamera: {instanceID: 0}
+  - battleUI: {instanceID: 0}
+  - TilePrefab: {fileID: 1000013354312002, guid: 6250c1fe663f5490b9fa81ca96d1ec4f,
+      type: 2}
+  - UserPlayerPrefab: {instanceID: 0}
+  - AIPlayerPrefab: {instanceID: 0}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
