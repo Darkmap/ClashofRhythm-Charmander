@@ -251,7 +251,6 @@ public class GameManager : MonoBehaviour {
 				undisplayMoveableGrids ();
 				p.moved = true;
 				map [(int)p.gridPosition.x, (int)p.gridPosition.y].playerOnTile = null;
-				Debug.Log (p.transform.localRotation.y);
 				if ((destTile.gridPosition.y - p.gridPosition.y) * p.leftright < 0) {
 					p.leftright *= -1;
 
@@ -365,7 +364,6 @@ public class GameManager : MonoBehaviour {
 			putTriangle (gobj, green_triangle);
 
 		}
-//		currentPlayer = userPlayers [0];
 		for (int i = 0; i < 3; i++) {
 			AIPlayer aiplayer;
 			GameObject gobj2 = (GameObject)Instantiate(aiUnitPrefabs[i], new Vector3(- 2 * i + columns - 2 , 2-rows, -1) + mapPosition, Quaternion.Euler(new Vector3(0, 180, 0)));
@@ -388,8 +386,6 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void aiMove(){
-
-		Debug.Log (currentPlayer.gameObject.name);
 		if (turn == 0)
 			return;
 
@@ -403,21 +399,55 @@ public class GameManager : MonoBehaviour {
 		} else {
 			Tile currentTile = tileUnderPlayer (p);
 			bool flag = false;
-			for (int i = 2; i >= 0; i--) {
-				if (flag)
-					break;
-				for (int j = 2; j >= 0; j--) {
-					
-					if ((int)currentTile.gridPosition.x - i >= 0 && (int)currentTile.gridPosition.y - j >= 0) {
-						Tile tile = map [(int)currentTile.gridPosition.x - i, (int)currentTile.gridPosition.y - j];
-						if (tile != null && tile.playerOnTile == null){
-							moveCurrentPlayer (tile);
-							flag = true;
-							break;
+			int[,] visited = new int[rows, columns];
+			Tile destTile = null;
+			int min = 1000;
+			Queue<int[]> q = new Queue<int[]> ();
+			q.Enqueue (new int[2]{(int)p.gridPosition.x, (int)p.gridPosition.y});
+			for (int i = 0; i <= p.steps / 2; i++) {
+				int length = q.Count;
+				for (int j = 0; j < length; j++) {
+					int[] pair = q.Dequeue();
+					int xx = pair [0];
+					int yy = pair [1];
+					if (xx < 0 || yy < 0 || xx >= rows || yy >= columns || visited [xx, yy] > 0) {
+						continue;
+					}
+					if (map [xx, yy].playerOnTile == null) {
+						Tile curTile = map [xx, yy];
+						visited [xx, yy] = 1;
+						int minDis = 1000;
+						foreach (Player userUnit in userPlayers) {
+							minDis = Math.Min (minDis, mDistance (userUnit.gridPosition, curTile.gridPosition));
+						}
+						if (minDis < min) {
+							destTile = curTile;
+							min = minDis;
 						}
 					}
+					q.Enqueue(new int[2]{xx + 1, yy});
+					q.Enqueue(new int[2]{xx - 1, yy});
+					q.Enqueue(new int[2]{xx, yy + 1});
+					q.Enqueue(new int[2]{xx, yy - 1});
 				}
 			}
+
+			moveCurrentPlayer (destTile);
+//			for (int i = p.steps / 2 - 1; i >= 0; i--) {
+//				if (flag)
+//					break;
+//				for (int j = p.steps / 2 - 1; j >= 0; j--) {
+//					
+//					if ((int)currentTile.gridPosition.x - i >= 0 && (int)currentTile.gridPosition.y - j >= 0) {
+//						Tile tile = map [(int)currentTile.gridPosition.x - i, (int)currentTile.gridPosition.y - j];
+//						if (tile != null && tile.playerOnTile == null){
+//							moveCurrentPlayer (tile);
+//							flag = true;
+//							break;
+//						}
+//					}
+//				}
+//			}
 			p.moved = true;
 		}
 		if (!battleCamera.activeSelf) {
@@ -427,7 +457,6 @@ public class GameManager : MonoBehaviour {
 
 	public void displayMoveableGrids(Player p){
 		colorChangeBFS ((int)p.gridPosition.x, (int)p.gridPosition.y, p.steps / 2);
-		Debug.Log ("grid position: " + p.gridPosition);
 	}
 
 	public void colorChangeBFS(int x, int y, int n){
@@ -440,10 +469,6 @@ public class GameManager : MonoBehaviour {
 				int[] pair = queue.Dequeue();
 				int xx = pair [0];
 				int yy = pair [1];
-				if (xx == 0 && yy == 3) {
-					Debug.Log (xx + "," + yy);
-					Debug.Log (i);
-				}
 				if (xx < 0 || yy < 0 || xx >= rows || yy >= columns || visited [xx, yy] > 0) {
 					continue;
 				}
@@ -465,14 +490,6 @@ public class GameManager : MonoBehaviour {
 			}
 
 		}
-		//turn color
-//		Tile curTile = map[x, y];
-//		if (curTile.playerOnTile != null) {
-//			curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.red);
-//		} else {
-//			curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.green);
-//		}
-
 
 	}
 
@@ -563,6 +580,7 @@ public class GameManager : MonoBehaviour {
 		removeFromPlayerList (activePlayer);
 		activePlayer.SetActive (false);
 	}
+
 	public void destroyCurrentEnermy() {
 		tileUnderPlayer (activeEnemy.GetComponent<AIPlayer> ()).playerOnTile = null;
 		removeFromPlayerList (activeEnemy);
