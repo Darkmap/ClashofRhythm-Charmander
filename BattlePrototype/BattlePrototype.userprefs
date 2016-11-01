@@ -1,0 +1,29 @@
+﻿<Properties StartupItem="Assembly-CSharp.csproj">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="Unity.Instance.Unity Editor" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/scripts/GameManager.cs">
+    <Files>
+<<<<<<< af4e67aadbe2eb39e54a126978dcb4c9b546c91b
+      <File FileName="Assets/scripts/GameManager.cs" Line="543" Column="22" />
+      <File FileName="Assets/scripts/BattleManager.cs" Line="333" Column="10" />
+      <File FileName="Assets/scripts/Player.cs" Line="23" Column="20" />
+=======
+<<<<<<< dc7b6b70127687e13a76ff8b3ff470c144b51346
+      <File FileName="Assets/scripts/GameManager.cs" Line="470" Column="27" />
+      <File FileName="Assets/scripts/BattleManager.cs" Line="363" Column="3" />
+      <File FileName="Assets/scripts/Player.cs" Line="17" Column="17" />
+=======
+      <File FileName="Assets/GameManager1.cs" Line="1" Column="1" />
+      <File FileName="Assets/scripts/BattleManager.cs" Line="260" Column="41" />
+      <File FileName="Assets/scripts/GameManager.cs" Line="274" Column="1" />
+      <File FileName="Assets/scripts/Player.cs" Line="11" Column="29" />
+      <File FileName="Assets/scripts/UserPlayer.cs" Line="11" Column="17" />
+      <File FileName="Assets/scripts/Tile.cs" Line="21" Column="3" />
+>>>>>>> changed map grid texture
+>>>>>>> changed map grid texture
+    </Files>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+</Properties>
