@@ -399,8 +399,9 @@ public class BattleManager : MonoBehaviour {
 				if (!user && !enemy) {
 					Invoke ("rotationRestore", 0.5f);
 					move_back = false;
-					MainMusic.play = true;
 					setRingsActive (true);
+
+					MainMusic.play = true;
 				}
 			}
 		}
