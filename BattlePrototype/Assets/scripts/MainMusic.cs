@@ -90,13 +90,14 @@ public class MainMusic : MonoBehaviour {
 				float temp = Random.value;
 				count = 50;
 				MainMusic.finish = false;
-				if (temp < 0.1f) {
-					//left2right
-					turnType = 2;
-				} else if (temp < 0.2f) {
-					//right2left
-					turnType = 3;
-				} else if (temp < 0.6f) {
+//				if (temp < 0.1f) {
+//					//left2right
+////					turnType = 2;
+//				} else if (temp < 0.2f) {
+//					//right2left
+////					turnType = 3;
+//				} else if (temp < 0.6f) {
+				if (temp <= 0.5f) {
 					//left
 					turnType = 0;
 
