@@ -75,9 +75,6 @@ public class Player : MonoBehaviour {
 			}
 		} else {
 			if (GameManager.mDistance (this.transform.position, currentPlayer.transform.position) == 2 && !currentPlayer.moved) {
-//				currentPlayer.moved = true;
-//				GameManager.instance.enterBattleScene (currentPlayer, this);
-//				return;
 				currentPlayer.attack(this);
 				return;
 			}
