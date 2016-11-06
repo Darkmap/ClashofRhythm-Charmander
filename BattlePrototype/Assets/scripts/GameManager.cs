@@ -30,6 +30,11 @@ public class GameManager : MonoBehaviour {
 	public Text playerUnit;
 	public Text enemyUnit;
 
+	public GameObject plain;
+	public GameObject hill;
+	public GameObject forest;
+	public GameObject castle;
+
 	public Image palyerHealth;
 	public Image enemyHealth;
 
@@ -340,6 +345,8 @@ public class GameManager : MonoBehaviour {
 		Tile tilen = map [rows - 1, columns - 1];
 		tile0.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
 		tilen.gameObject.GetComponent<SpriteRenderer> ().sprite = terrain_sprites[20];
+		tile0.terrainType = Terrain.Castle;
+		tilen.terrainType = Terrain.Castle;
 	}
 
 	void generatePlayer() {
@@ -508,6 +515,31 @@ public class GameManager : MonoBehaviour {
 	public void enterBattleScene(Player self, Player enemy){
 		Debug.Log ("Battle Start!");
 		Terrain terrainType = tileUnderPlayer (enemy).terrainType;
+		Debug.Log ("terrainType: "+ terrainType);
+
+		if (terrainType == Terrain.Castle) {
+			castle.SetActive (true);
+			plain.SetActive (false);
+			hill.SetActive (false);
+			forest.SetActive (false);
+		} else if (terrainType == Terrain.Highland) {
+			castle.SetActive (false);
+			plain.SetActive (false);
+			hill.SetActive (true);
+			forest.SetActive (false);
+		} else if (terrainType == Terrain.Forest) {
+			castle.SetActive (false);
+			plain.SetActive (false);
+			hill.SetActive (false);
+			forest.SetActive (true);
+		} else {
+			castle.SetActive (false);
+			plain.SetActive (true);
+			hill.SetActive (false);
+			forest.SetActive (false);
+		}
+
+
 		if (self.GetType () == typeof(UserPlayer)) {
 			activePlayer = self.gameObject;
 			activeEnemy = enemy.gameObject;

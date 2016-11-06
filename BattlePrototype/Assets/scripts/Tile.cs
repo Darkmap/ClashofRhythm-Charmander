@@ -12,7 +12,8 @@ public enum Sides{
 public enum Terrain{
 	Plain = 0,
 	Highland = 17,
-	Forest = 16
+	Forest = 16,
+	Castle = 20,
 }
 
 public class Tile : MonoBehaviour {
