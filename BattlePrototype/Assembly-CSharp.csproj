@@ -59,6 +59,7 @@
      <Compile Include="Assets\scripts\Press.cs" />
      <Compile Include="Assets\scripts\Scale.cs" />
      <Compile Include="Assets\scripts\Sliding.cs" />
+     <Compile Include="Assets\scripts\StartSceneManager.cs" />
      <Compile Include="Assets\scripts\Tile.cs" />
      <Compile Include="Assets\scripts\Unit.cs" />
      <Compile Include="Assets\scripts\UserPlayer.cs" />
