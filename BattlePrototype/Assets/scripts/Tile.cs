@@ -9,12 +9,18 @@ public enum Sides{
 	Left,
 	Top
 }
+public enum Terrain{
+	Plain = 0,
+	Highland = 17,
+	Forest = 16
+}
 
 public class Tile : MonoBehaviour {
 	public int autotileID;
 	public Tile[] neighbors = new Tile[4];
 	public Vector2 gridPosition = Vector2.zero;
 	public Player playerOnTile;
+	public Terrain terrainType;
 	public void addNeighbor(Sides side, Tile tile){
 		neighbors [(int)side] = tile;
 		CalculateAutotileID ();

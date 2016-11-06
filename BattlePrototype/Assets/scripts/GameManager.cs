@@ -320,10 +320,16 @@ public class GameManager : MonoBehaviour {
 				if (tile == null)
 					continue;
 				var spriteID = tile.autotileID;
-				if (spriteID == 15 && r > 0.9f)
+
+				if (spriteID == 15 && r > 0.9f) {
 					spriteID = 16;
-				else if (spriteID == 15 && r > 0.8f)
+					tile.terrainType = Terrain.Forest;
+				} else if (spriteID == 15 && r > 0.8f) {
 					spriteID = 17;
+					tile.terrainType = Terrain.Highland;
+				} else {
+					tile.terrainType = Terrain.Plain;
+				}
 				if (spriteID >= 0) {
 					var sr = tile.gameObject.GetComponent<SpriteRenderer> ();
 					sr.sprite = terrain_sprites [spriteID];
@@ -433,21 +439,6 @@ public class GameManager : MonoBehaviour {
 			}
 
 			moveCurrentPlayer (destTile);
-//			for (int i = p.steps / 2 - 1; i >= 0; i--) {
-//				if (flag)
-//					break;
-//				for (int j = p.steps / 2 - 1; j >= 0; j--) {
-//					
-//					if ((int)currentTile.gridPosition.x - i >= 0 && (int)currentTile.gridPosition.y - j >= 0) {
-//						Tile tile = map [(int)currentTile.gridPosition.x - i, (int)currentTile.gridPosition.y - j];
-//						if (tile != null && tile.playerOnTile == null){
-//							moveCurrentPlayer (tile);
-//							flag = true;
-//							break;
-//						}
-//					}
-//				}
-//			}
 			p.moved = true;
 		}
 		if (!battleCamera.activeSelf) {
@@ -516,7 +507,7 @@ public class GameManager : MonoBehaviour {
 
 	public void enterBattleScene(Player self, Player enemy){
 		Debug.Log ("Battle Start!");
-
+		Terrain terrainType = tileUnderPlayer (enemy).terrainType;
 		if (self.GetType () == typeof(UserPlayer)) {
 			activePlayer = self.gameObject;
 			activeEnemy = enemy.gameObject;
