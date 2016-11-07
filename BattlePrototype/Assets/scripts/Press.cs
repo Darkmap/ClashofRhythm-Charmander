@@ -4,7 +4,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
 
-public class Press : MonoBehaviour ,IPointerDownHandler,IPointerUpHandler,IPointerExitHandler {
+public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 	public Text txtCenter;
 	public Image leftRing;
 	public Image rightRing;
@@ -16,8 +16,8 @@ public class Press : MonoBehaviour ,IPointerDownHandler,IPointerUpHandler,IPoint
 	public int[] playList = new int[8];
 	public int playIdx = 0;
 
-	float delta;
-	
+	public static float delta;
+
 	// Update is called once per frame
 	void Update () {
 	
@@ -89,9 +89,9 @@ public class Press : MonoBehaviour ,IPointerDownHandler,IPointerUpHandler,IPoint
 
 
 	public void Start(){
+		Button button = this.gameObject.GetComponent<Button>();
 		playIdx = 0;
 	}
-
 
 	// 当按钮被按下后系统自动调用此方法  
 	public void OnPointerDown (PointerEventData eventData)  
@@ -114,7 +114,6 @@ public class Press : MonoBehaviour ,IPointerDownHandler,IPointerUpHandler,IPoint
 
 		}
 		Debug.Log ("mouse down end" +Time.time);
-
 	}  
 
 	// 当按钮抬起的时候自动调用此方法  
@@ -122,24 +121,47 @@ public class Press : MonoBehaviour ,IPointerDownHandler,IPointerUpHandler,IPoint
 	{  
 		Debug.Log ("mouse up" +Time.time);
 
+		Debug.Log ("Turntype: " + MainMusic.turnType);
+
 		if( MainMusic.turnType == 2){
 			delta += System.Math.Abs ( MainMusic.getLastPoisition() - 500.0f );
-			check();
+			//check();
+
 		}else if( MainMusic.turnType == 3){
 			delta += System.Math.Abs ( MainMusic.getFirstPoisition() + 500.0f );
-			check();
+			//check();
+
 		}
+		Debug.Log ("mouse up end" +Time.time);
 	}  
 
 	// 当鼠标从按钮上离开的时候自动调用此方法  
-	public void OnPointerExit (PointerEventData eventData)  
-	{  
-		
-	} 
+//	public void OnPointerExit (PointerEventData eventData)  
+//	{  
+//		Debug.Log ("mouse leave" +Time.time);
+//
+//	} 
+//
+//	public void check(){
+//		Debug.Log ("check" +Time.time);
+//		if (delta <= 100.0f) {
+//			ShowScore( "amazing",txtCenter);
+//			playOK();
+//			MusicParameters.score += 100;
+//		} else if (delta<= 200.0f) {
+//			ShowScore ("good",txtCenter);
+//			playOK();
+//			MusicParameters.score += 50;
+//		} else {
+//			ShowScore ("bad",txtCenter);
+//			Error.Play ();
+//			MusicParameters.score -= 50;
+//		}
+//	}
 
-	public void check(){
+	public void reset(){
+
 		Debug.Log ("check" +Time.time);
-
 		if (delta <= 100.0f) {
 			ShowScore( "amazing",txtCenter);
 			playOK();
@@ -153,17 +175,9 @@ public class Press : MonoBehaviour ,IPointerDownHandler,IPointerUpHandler,IPoint
 			Error.Play ();
 			MusicParameters.score -= 50;
 		}
-		reset ();
-	}
-
-	public void reset(){
-		delta = 0;
-		while (true) {
-			if (MainMusic.finish) {
-				MusicParameters.count += 1;
-				MainMusic.action = false;
-				break;
-			}
-		}
+		delta = 0.0f;
+		MusicParameters.count += 1;
+		MainMusic.action = false;
+		
 	}
 }

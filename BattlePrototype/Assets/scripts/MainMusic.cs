@@ -17,9 +17,13 @@ public class MainMusic : MonoBehaviour {
 	public GameObject right2leftCircle;
 	public int count = 50;
 
+	public Button leftButton;
+	public Button rightButton;
+
 	public static GameObject firstCircle;
 	public static GameObject lastCircle;
 	public static bool finish;
+
 
 	// Use this for initialization
 	void Start () {
@@ -53,17 +57,21 @@ public class MainMusic : MonoBehaviour {
 //							Debug.Log ("start test");
 //							Debug.Log (firstCircle.transform.localPosition.x);
 //							Debug.Log ("test end");
-						} else if (count == 1) {
+						} 
+						if (count == 1) {
 							lastCircle = obj;
 //							Debug.Log (firstCircle.transform.localPosition.x);
 						}
 
-						obj.transform.SetParent (GameObject.Find ("BattleUI").transform);
+						obj.transform.SetParent (GameObject.Find ("Top").transform);
 						obj.transform.localPosition = new Vector3 (280.0f, 0f, 5.0f);
 						count -= 1;
 						return;
-					} else if (lastCircle == null) {
-						MainMusic.finish = true;
+					} else {
+						if (lastCircle == null) {
+//							Press.re = true;
+							rightButton.gameObject.GetComponent<Press>().reset();
+						}
 					}
 					break;
 				case 3:
@@ -71,16 +79,21 @@ public class MainMusic : MonoBehaviour {
 						GameObject obj = (GameObject)Instantiate (right2leftCircle, transform.position + new Vector3 (0f, 0f, 5.0f), Quaternion.Euler (0, 0, 0));
 						if (count == 50) {
 							firstCircle = obj;
-						} else if (count == 1) {
+						} 
+						if (count == 1) {
 							lastCircle = obj;
 						}
 
-						obj.transform.SetParent (GameObject.Find ("BattleUI").transform);
+						obj.transform.SetParent (GameObject.Find ("Top").transform);
 						obj.transform.localPosition = new Vector3 (-280.0f, 0f, 5.0f);
 						count -= 1;
 						return;
-					} else if (lastCircle == null) {
-						MainMusic.finish = true;
+					} else  {
+						if (lastCircle == null) {
+//							Press.re = true;
+							leftButton.gameObject.GetComponent<Press>().reset();
+						}
+
 					}
 
 					break;
