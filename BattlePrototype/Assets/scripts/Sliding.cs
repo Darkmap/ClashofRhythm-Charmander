@@ -18,7 +18,7 @@ public class Sliding : MonoBehaviour {
 			transform.Translate (Vector3.left * moveSpeed );
 		}
 
-		if (gameObject.transform.localPosition.x > 500.0f || gameObject.transform.localPosition.x < -500.0f) {
+		if (gameObject.transform.localPosition.x > 580.0f || gameObject.transform.localPosition.x < -580.0f) {
 			Destroy (gameObject);
 		}
 		 

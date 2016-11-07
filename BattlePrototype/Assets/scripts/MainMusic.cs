@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
+//using System;
 
 public class MainMusic : MonoBehaviour {
 	public static bool play = false;
@@ -22,8 +24,9 @@ public class MainMusic : MonoBehaviour {
 
 	public static GameObject firstCircle;
 	public static GameObject lastCircle;
-	public static bool finish;
-
+	public static bool pressed;//you wu an 
+	public static IList<GameObject> circles = new List<GameObject>();
+	public static int time = 0;
 
 	// Use this for initialization
 	void Start () {
@@ -62,14 +65,16 @@ public class MainMusic : MonoBehaviour {
 							lastCircle = obj;
 //							Debug.Log (firstCircle.transform.localPosition.x);
 						}
-
+						circles.Add (obj);
 						obj.transform.SetParent (GameObject.Find ("Top").transform);
 						obj.transform.localPosition = new Vector3 (280.0f, 0f, 5.0f);
 						count -= 1;
 						return;
 					} else {
+						time++;
 						if (lastCircle == null) {
 //							Press.re = true;
+							Debug.Log(pressed);
 							rightButton.gameObject.GetComponent<Press>().reset();
 						}
 					}
@@ -83,14 +88,16 @@ public class MainMusic : MonoBehaviour {
 						if (count == 1) {
 							lastCircle = obj;
 						}
-
+						circles.Add (obj);
 						obj.transform.SetParent (GameObject.Find ("Top").transform);
 						obj.transform.localPosition = new Vector3 (-280.0f, 0f, 5.0f);
 						count -= 1;
 						return;
 					} else  {
+						time++;
 						if (lastCircle == null) {
 //							Press.re = true;
+							Debug.Log(pressed);
 							leftButton.gameObject.GetComponent<Press>().reset();
 						}
 
@@ -102,15 +109,16 @@ public class MainMusic : MonoBehaviour {
 			} else {
 				float temp = Random.value;
 				count = 50;
-				MainMusic.finish = false;
-//				if (temp < 0.1f) {
-//					//left2right
-////					turnType = 2;
-//				} else if (temp < 0.2f) {
-//					//right2left
-////					turnType = 3;
-//				} else if (temp < 0.6f) {
-				if (temp <= 0.5f) {
+				pressed = false;
+				circles.Clear ();
+				time = 0;
+				if (temp < 0.5f) {
+					//left2right
+					turnType = 2;
+				} else if (temp < 1f) {
+					//right2left
+					turnType = 3;
+				} else if (temp < 0.6f) {
 					//left
 					turnType = 0;
 
@@ -212,18 +220,38 @@ public class MainMusic : MonoBehaviour {
 		} 
 	}
 
+	public static float getCloest(){
+		float min = 300.0f;
+		int j = 0;
+		for (int i = 0; i < circles.Count; i++) {
+			if (circles [i] != null && System.Math.Abs (circles [i].transform.localPosition.x - 580.0f) < min) {
+				min = System.Math.Abs (circles [i].transform.localPosition.x - 580.0f);
+				j = i;
+			}
+		}
+		if (turnType == 2)
+			return j * 10.0f + 580.0f;
+		else  {
+			return -580.0f - j * 10.0f;
+		}
+
+	}
 	public static float getFirstPoisition(){
 		if (firstCircle != null)
 			return firstCircle.transform.localPosition.x;
 		else
-			return turnType == 2 ? 500.0f : - 500.0f;
+			return getCloest();
 	}
 
 	public static float getLastPoisition(){
-		if (firstCircle != null)
+		if (lastCircle != null)
 			return lastCircle.transform.localPosition.x;
-		else
-			return turnType == 2 ? 500.0f : - 500.0f;
+		else {
+			if (turnType == 2)
+				return time * 10.0f + 580.0f;
+			else
+				return -time * 10.0f - 580.0f;
+		}
 		
 	}
 
