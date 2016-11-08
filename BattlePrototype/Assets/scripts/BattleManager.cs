@@ -15,6 +15,8 @@ public class BattleManager : MonoBehaviour {
 	public Player userPlayer;
 	public Player enemyPlayer;
 
+	public Terrain currentTerrain;
+
 	public void setObjs(GameObject userPrefab, GameObject enemyPrefab) {
 		this.userPrefab = userPrefab;
 		this.enemyPrefab = enemyPrefab;
@@ -320,22 +322,36 @@ public class BattleManager : MonoBehaviour {
 	}
 
 	void doingAttack() {
+		float userFactor = 1f;
+		float enemyFactor = 1f;
 
-
+		if (currentTerrain == Terrain.Plain) {
+			userFactor = userPlayer.plainFactor;
+			enemyFactor = enemyPlayer.plainFactor;
+		} else if (currentTerrain == Terrain.Highland) {
+			userFactor = userPlayer.hillFactor;
+			enemyFactor = enemyPlayer.hillFactor;
+		} else if (currentTerrain == Terrain.Forest) {
+			userFactor = userPlayer.forrestFactor;
+			enemyFactor = enemyPlayer.forrestFactor;
+		} else {
+			userFactor = userPlayer.cityFactor;
+			enemyFactor = enemyPlayer.cityFactor;
+		}
 
 		switch (performanceType) {
 		case 1:
-			playerHealthBar.fillAmount -= 0.4f * enemyPlayer.strength;
+			playerHealthBar.fillAmount -= 0.4f * enemyPlayer.strength * enemyFactor;
 			break;
 		case 2:
-			playerHealthBar.fillAmount -= 0.2f * enemyPlayer.strength;
-			enemyHealthBar.fillAmount -= 0.2f * userPlayer.strength;
+			playerHealthBar.fillAmount -= 0.2f * enemyPlayer.strength * enemyFactor;
+			enemyHealthBar.fillAmount -= 0.2f * userPlayer.strength * userFactor;
 			break;
 		case 3:
-			enemyHealthBar.fillAmount -= 0.2f * userPlayer.strength;
+			enemyHealthBar.fillAmount -= 0.2f * userPlayer.strength * userFactor;
 			break;
 		case 4:
-			enemyHealthBar.fillAmount -= 0.4f * userPlayer.strength;
+			enemyHealthBar.fillAmount -= 0.4f * userPlayer.strength * userFactor;
 			break;
 		default:
 			break;

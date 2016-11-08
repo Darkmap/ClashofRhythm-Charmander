@@ -515,6 +515,7 @@ public class GameManager : MonoBehaviour {
 	public void enterBattleScene(Player self, Player enemy){
 		Debug.Log ("Battle Start!");
 		Terrain terrainType = tileUnderPlayer (enemy).terrainType;
+		BattleManager.instance.currentTerrain = terrainType;
 		Debug.Log ("terrainType: "+ terrainType);
 
 		if (terrainType == Terrain.Castle) {

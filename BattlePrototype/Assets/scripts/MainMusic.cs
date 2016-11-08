@@ -112,13 +112,13 @@ public class MainMusic : MonoBehaviour {
 				pressed = false;
 				circles.Clear ();
 				time = 0;
-				if (temp < 0.5f) {
+				if (temp < 0.15f) {
 					//left2right
 					turnType = 2;
-				} else if (temp < 1f) {
+				} else if (temp < 0.3f) {
 					//right2left
 					turnType = 3;
-				} else if (temp < 0.6f) {
+				} else if (temp < 0.65f) {
 					//left
 					turnType = 0;
 

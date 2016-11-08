@@ -9,6 +9,12 @@ public class Player : MonoBehaviour {
 	public int steps;
 	public float health;
 	public float strength;
+
+	public float plainFactor;
+	public float hillFactor;
+	public float forrestFactor;
+	public float cityFactor;
+
 	public bool moved;
 	// 1 for right, -1 for left
 	public int leftright;
