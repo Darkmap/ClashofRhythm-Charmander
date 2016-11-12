@@ -17,7 +17,7 @@ public class MainMusic : MonoBehaviour {
 	public GameObject rightRing;
 	public GameObject left2rightCircle;
 	public GameObject right2leftCircle;
-	public int count = 50;
+	public int count = 25;
 
 	public Button leftButton;
 	public Button rightButton;
@@ -55,7 +55,7 @@ public class MainMusic : MonoBehaviour {
 				case 2:
 					if (count > 0) {
 						GameObject obj = (GameObject)Instantiate (left2rightCircle, transform.position + new Vector3 (0f, 0f, 5.0f), Quaternion.Euler (0, 0, 0));
-						if (count == 50) {
+						if (count == 25) {
 							firstCircle = obj;
 //							Debug.Log ("start test");
 //							Debug.Log (firstCircle.transform.localPosition.x);
@@ -82,7 +82,7 @@ public class MainMusic : MonoBehaviour {
 				case 3:
 					if (count > 0) {
 						GameObject obj = (GameObject)Instantiate (right2leftCircle, transform.position + new Vector3 (0f, 0f, 5.0f), Quaternion.Euler (0, 0, 0));
-						if (count == 50) {
+						if (count == 25) {
 							firstCircle = obj;
 						} 
 						if (count == 1) {
@@ -108,7 +108,7 @@ public class MainMusic : MonoBehaviour {
 				}
 			} else {
 				float temp = Random.value;
-				count = 50;
+				count = 25;
 				pressed = false;
 				circles.Clear ();
 				time = 0;
@@ -230,9 +230,9 @@ public class MainMusic : MonoBehaviour {
 			}
 		}
 		if (turnType == 2)
-			return j * 10.0f + 580.0f;
+			return j * 20.0f + 580.0f;
 		else  {
-			return -580.0f - j * 10.0f;
+			return -580.0f - j * 20.0f;
 		}
 
 	}
@@ -248,9 +248,9 @@ public class MainMusic : MonoBehaviour {
 			return lastCircle.transform.localPosition.x;
 		else {
 			if (turnType == 2)
-				return time * 10.0f + 580.0f;
+				return time * 20.0f + 580.0f;
 			else
-				return -time * 10.0f - 580.0f;
+				return -time * 20.0f - 580.0f;
 		}
 		
 	}
