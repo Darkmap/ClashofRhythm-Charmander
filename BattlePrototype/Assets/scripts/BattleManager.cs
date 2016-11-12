@@ -387,7 +387,7 @@ public class BattleManager : MonoBehaviour {
 	void attack_round() {
 		if (!move_forward && !reverse && !move_back) {
 //			Debug.Log (MusicParameters.count);
-			if (MusicParameters.count >= 10) {
+			if (MusicParameters.count >= 5) {
 				performance = MusicParameters.getPortion ();
 				move_forward = true;
 				MainMusic.play = false;

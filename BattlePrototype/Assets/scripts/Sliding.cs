@@ -3,7 +3,7 @@ using System.Collections;
 
 public class Sliding : MonoBehaviour {
 	public bool isRight = false;
-	public float moveSpeed = 10.0f;
+	public float moveSpeed = 20.0f;
 
 	// Use this for initialization
 	void Start () {

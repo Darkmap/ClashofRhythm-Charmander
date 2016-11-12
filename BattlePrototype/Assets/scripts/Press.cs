@@ -102,7 +102,7 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 		} else  if( MainMusic.turnType == 2){
 			//Debug.Log ("2" +Time.time);
 
-			delta += System.Math.Abs ( MainMusic.getFirstPoisition() - 500.0f);
+			delta += System.Math.Abs ( MainMusic.getFirstPoisition() - 580.0f);
 			//Debug.Log ("2 end" +Time.time);
 			MainMusic.pressed = true;
 
@@ -111,7 +111,7 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 			MainMusic.pressed = true;
 
 
-			delta += System.Math.Abs ( MainMusic.getFirstPoisition() + 500.0f );
+			delta += System.Math.Abs ( MainMusic.getFirstPoisition() + 580.0f );
 			//Debug.Log ("3 end" +Time.time);
 
 		}
@@ -126,11 +126,11 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 		//Debug.Log ("Turntype: " + MainMusic.turnType);
 
 		if( MainMusic.turnType == 2){
-			delta += System.Math.Abs ( MainMusic.getLastPoisition() - 500.0f );
+			delta += System.Math.Abs ( MainMusic.getLastPoisition() - 580.0f );
 			//check();
 			MainMusic.pressed = true;
 		}else if( MainMusic.turnType == 3){
-			delta += System.Math.Abs ( MainMusic.getFirstPoisition() + 500.0f );
+			delta += System.Math.Abs ( MainMusic.getLastPoisition() + 580.0f );
 			//check();
 			MainMusic.pressed = true;
 
@@ -186,5 +186,17 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 		MusicParameters.count += 1;
 		MainMusic.action = false;
 		
+	}
+
+	public void res(){
+		if (MainMusic.turnType == 1 && MainMusic.right_pressed ==0 ) {
+			ShowScore ("Miss",txtCenter);
+			Error.Play ();
+			MusicParameters.score -= 50;
+		} else if (MainMusic.turnType == 0 && MainMusic.left_pressed == 0) {
+			ShowScore ("Miss",txtCenter);
+			Error.Play ();
+			MusicParameters.score -= 50;
+		}
 	}
 }
