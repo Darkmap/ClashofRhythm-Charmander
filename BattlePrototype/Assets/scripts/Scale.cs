@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
+using System.Collections.Generic;
 
 public class Scale : MonoBehaviour {
 
@@ -7,6 +9,9 @@ public class Scale : MonoBehaviour {
 	public float rotation = 0.0f;
 	public float collapse_rate = 0.3f;
 	public bool isRight;
+
+	public Button leftButton;
+	public Button rightButton;
 
 	// Use this for initialization
 	void Start () {
@@ -25,6 +30,14 @@ public class Scale : MonoBehaviour {
 				
 				gameObject.transform.localScale = new Vector3 (1, 1, 1);
 				gameObject.SetActive (false);
+
+				if (isRight) {
+					rightButton.gameObject.GetComponent<Press>().res();
+
+				} else {
+					leftButton.gameObject.GetComponent<Press>().res();
+
+				}
 				MusicParameters.count += 1;
 				MainMusic.turnType = 5;
 
