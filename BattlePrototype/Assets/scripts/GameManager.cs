@@ -512,6 +512,19 @@ public class GameManager : MonoBehaviour {
 		return null;
 	}
 
+	public bool isBattleEnd (){
+		return userPlayers.Count == 0 || aiPlayers.Count == 0;
+	}
+
+	public void toEndScene(){
+		if (isBattleEnd ()) {
+			Invoke ("changeScene", 3f);
+		}
+	}
+	public void changeScene(){
+		Application.LoadLevel ("EndScene");
+	}
+
 	public void enterBattleScene(Player self, Player enemy){
 		Debug.Log ("Battle Start!");
 		Terrain terrainType = tileUnderPlayer (enemy).terrainType;
