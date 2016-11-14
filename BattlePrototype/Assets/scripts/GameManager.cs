@@ -8,6 +8,8 @@ using System;
 public class GameManager : MonoBehaviour {
 	public Vector3 mapPosition = new Vector3 (-500, -500, 0);
 
+	static public bool result = false;
+
 	public enum TileType{
 		Empty = -1,
 		Grass = 15,
@@ -513,12 +515,16 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public bool isBattleEnd (){
+		if (userPlayers.Count == 0)
+			GameManager.result = false;
+		else if (aiPlayers.Count == 0)
+			GameManager.result = true;
 		return userPlayers.Count == 0 || aiPlayers.Count == 0;
 	}
 
 	public void toEndScene(){
 		if (isBattleEnd ()) {
-			Invoke ("changeScene", 3f);
+			Invoke ("changeScene", 5f);
 		}
 	}
 	public void changeScene(){
@@ -672,5 +678,7 @@ public class GameManager : MonoBehaviour {
 			: "Enemy's Turn");
 //				+ "Moving " + currentPlayer.gameObject.name.Substring(0, currentPlayer.gameObject.name.IndexOf('(')).ToUpperInvariant();
 		}
+
+		toEndScene ();
 	}
 }
