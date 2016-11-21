@@ -459,6 +459,18 @@ public class GameManager : MonoBehaviour {
 		colorChangeBFS ((int)p.gridPosition.x, (int)p.gridPosition.y, p.steps / 2);
 	}
 
+	public float terrainFactor(Player p, Tile tile){
+		if (tile.terrainType == Terrain.Plain)
+			return p.plainFactor;
+		if (tile.terrainType == Terrain.Highland)
+			return p.hillFactor;
+		if (tile.terrainType == Terrain.Forest)
+			return p.forrestFactor;
+		if (tile.terrainType == Terrain.Castle)
+			return p.cityFactor;
+		return 0;
+	}
+
 	public void colorChangeBFS(int x, int y, int n){
 		int[,] visited = new int[rows, columns];
 		Queue<int[]> queue = new Queue<int[]> ();
@@ -473,15 +485,27 @@ public class GameManager : MonoBehaviour {
 					continue;
 				}
 				Tile curTile = map[xx, yy];
-				if (curTile.playerOnTile != null) {
-					if (curTile.playerOnTile == currentPlayer) {
-						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.yellow);
+//				if (curTile.playerOnTile != null && curTile.playerOnTile != currentPlayer) {
+////					if (curTile.playerOnTile == currentPlayer) {
+////						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.yellow);
+////					}
+////					} else {
+////						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.red);
+////					}
+//				} else {
+					float factor = terrainFactor (currentPlayer, curTile);
+					if (factor == 1) {
+						// plain with light green
+						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", new Color (0.7f, 1f, 0.7f));
+					} else if (factor > 1) {
+						// advantage terrain with dark green
+						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", new Color (0f, 0.8f, 0f));
 					} else {
-						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.red);
+						// disadvantage terrain with light red
+						curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", new Color (1f, 0.7f, 0.7f));
 					}
-				} else {
-					curTile.gameObject.GetComponent<SpriteRenderer> ().material.SetColor ("_Color", Color.green);
-				}
+
+//				}
 				visited[xx, yy] = 1;
 				queue.Enqueue(new int[2]{xx + 1, yy});
 				queue.Enqueue(new int[2]{xx - 1, yy});
