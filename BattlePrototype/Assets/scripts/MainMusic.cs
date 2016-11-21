@@ -24,7 +24,9 @@ public class MainMusic : MonoBehaviour {
 
 	public static GameObject firstCircle;
 	public static GameObject lastCircle;
-	public static bool pressed;//you wu an 
+	public static bool left_pressed;//you wu an l
+	public static bool right_pressed;//you wu an 
+
 	public static IList<GameObject> circles = new List<GameObject>();
 	public static int time = 0;
 
@@ -109,7 +111,8 @@ public class MainMusic : MonoBehaviour {
 			} else {
 				float temp = Random.value;
 				count = 25;
-				pressed = false;
+				left_pressed = false;
+				right_pressed = false;
 				circles.Clear ();
 				time = 0;
 				if (temp < 0.15f) {
@@ -163,6 +166,12 @@ public class MainMusic : MonoBehaviour {
 		if (lastCircle != null)
 			return lastCircle.transform.localPosition.x;
 		else {
+			if (time == 0) {
+				if (turnType == 2)
+					return 280.0f;
+				else
+					return -280.0f;
+			}
 			if (turnType == 2)
 				return time * 20.0f + 580.0f;
 			else

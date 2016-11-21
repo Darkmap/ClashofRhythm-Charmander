@@ -104,15 +104,21 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 			Debug.Log ("first position: " +MainMusic.getFirstPoisition());
 			delta += System.Math.Abs ( MainMusic.getFirstPoisition() - 580.0f);
 			//Debug.Log ("first position: " +MainMusic.getFirstPoisition());
-			MainMusic.pressed = true;
-
+			if( isRight )
+				MainMusic.right_pressed = true;
+			else
+				MainMusic.left_pressed = true;
+			
 		}else if( MainMusic.turnType == 3){
 			//Debug.Log ("3" +Time.time);
-			MainMusic.pressed = true;
 			Debug.Log ("first position: " +MainMusic.getFirstPoisition());
 
 			delta += System.Math.Abs ( MainMusic.getFirstPoisition() + 580.0f );
 			//Debug.Log ("3 end" +Time.time);
+			if( isRight )
+				MainMusic.right_pressed = true;
+			else
+				MainMusic.left_pressed = true;
 
 		}
 		//Debug.Log ("mouse down end" +Time.time);
@@ -126,15 +132,15 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 		//Debug.Log ("Turntype: " + MainMusic.turnType);
 
 		if( MainMusic.turnType == 2){
-			Debug.Log ("first position: " +MainMusic.getLastPoisition());
+			Debug.Log ("last position: " +MainMusic.getLastPoisition());
 			delta += System.Math.Abs ( MainMusic.getLastPoisition() - 580.0f );
 			//check();
-			MainMusic.pressed = true;
+			//MainMusic.pressed = true;
 		}else if( MainMusic.turnType == 3){
-			Debug.Log ("first position: " +MainMusic.getLastPoisition());
+			Debug.Log ("last position: " +MainMusic.getLastPoisition());
 			delta += System.Math.Abs ( MainMusic.getLastPoisition() + 580.0f );
 			//check();
-			MainMusic.pressed = true;
+			//MainMusic.pressed = true;
 
 		}
 		//Debug.Log ("mouse up end" +Time.time);
@@ -167,15 +173,19 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 	public void reset(){
 
 		Debug.Log ("distence:"+ delta);
-		if (!MainMusic.pressed) {
+		if (!MainMusic.left_pressed && MainMusic.turnType == 3 ) {
 			ShowScore ("Miss",txtCenter);
 			Error.Play ();
 			MusicParameters.score -= 50;
-		}else if (delta <= 50.0f) {
+		}else if (!MainMusic.right_pressed && MainMusic.turnType == 2 ) {
+			ShowScore ("Miss",txtCenter);
+			Error.Play ();
+			MusicParameters.score -= 50;
+		}else if (delta <= 30.0f) {
 			ShowScore( "amazing",txtCenter);
 			playOK();
 			MusicParameters.score += 100;
-		} else if (delta<= 100.0f) {
+		} else if (delta<= 50.0f) {
 			ShowScore ("good",txtCenter);
 			playOK();
 			MusicParameters.score += 50;
