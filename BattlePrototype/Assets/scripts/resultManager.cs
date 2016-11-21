@@ -47,7 +47,7 @@ public class resultManager : MonoBehaviour {
 			userRb3.isKinematic = false;
 
 		} else {
-			resultLabel.text = "Defeated :(";
+			resultLabel.text = "Defeat :(";
 			defeatedAudio.Play ();
 
 			GameObject userObj1 = (GameObject)Instantiate(aiPrefab1, new Vector3(-4f, -2.8f, 0f), Quaternion.Euler(new Vector3()));
