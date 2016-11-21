@@ -169,11 +169,11 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 			ShowScore ("Miss",txtCenter);
 			Error.Play ();
 			MusicParameters.score -= 50;
-		}else if (delta <= 400.0f) {
+		}else if (delta <= 200.0f) {
 			ShowScore( "amazing",txtCenter);
 			playOK();
 			MusicParameters.score += 100;
-		} else if (delta<= 600.0f) {
+		} else if (delta<= 250.0f) {
 			ShowScore ("good",txtCenter);
 			playOK();
 			MusicParameters.score += 50;

@@ -224,8 +224,8 @@ public class MainMusic : MonoBehaviour {
 		float min = 300.0f;
 		int j = 0;
 		for (int i = 0; i < circles.Count; i++) {
-			if (circles [i] != null && System.Math.Abs (circles [i].transform.localPosition.x - 580.0f) < min) {
-				min = System.Math.Abs (circles [i].transform.localPosition.x - 580.0f);
+			if (circles [i] != null && ( 580.0f - System.Math.Abs (circles [i].transform.localPosition.x)) < min) {
+				min = 580.0f- System.Math.Abs (circles [i].transform.localPosition.x );
 				j = i;
 			}
 		}
