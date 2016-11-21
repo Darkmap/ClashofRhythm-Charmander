@@ -105,9 +105,9 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 			delta += System.Math.Abs ( MainMusic.getFirstPoisition() - 580.0f);
 			//Debug.Log ("first position: " +MainMusic.getFirstPoisition());
 			if( isRight )
-				MainMusic.right_pressed = true;
+				MainMusic.right_button_pressed = true;
 			else
-				MainMusic.left_pressed = true;
+				MainMusic.left_button_pressed = true;
 			
 		}else if( MainMusic.turnType == 3){
 			//Debug.Log ("3" +Time.time);
@@ -116,9 +116,9 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 			delta += System.Math.Abs ( MainMusic.getFirstPoisition() + 580.0f );
 			//Debug.Log ("3 end" +Time.time);
 			if( isRight )
-				MainMusic.right_pressed = true;
+				MainMusic.right_button_pressed = true;
 			else
-				MainMusic.left_pressed = true;
+				MainMusic.left_button_pressed = true;
 
 		}
 		//Debug.Log ("mouse down end" +Time.time);
@@ -173,11 +173,11 @@ public class Press : MonoBehaviour ,IPointerDownHandler, IPointerUpHandler {
 	public void reset(){
 
 		Debug.Log ("distence:"+ delta);
-		if (!MainMusic.left_pressed && MainMusic.turnType == 3 ) {
+		if (!MainMusic.left_button_pressed && MainMusic.turnType == 3 ) {
 			ShowScore ("Miss",txtCenter);
 			Error.Play ();
 			MusicParameters.score -= 50;
-		}else if (!MainMusic.right_pressed && MainMusic.turnType == 2 ) {
+		}else if (!MainMusic.right_button_pressed && MainMusic.turnType == 2 ) {
 			ShowScore ("Miss",txtCenter);
 			Error.Play ();
 			MusicParameters.score -= 50;

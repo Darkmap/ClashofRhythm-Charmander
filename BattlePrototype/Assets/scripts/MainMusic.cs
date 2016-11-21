@@ -24,8 +24,8 @@ public class MainMusic : MonoBehaviour {
 
 	public static GameObject firstCircle;
 	public static GameObject lastCircle;
-	public static bool left_pressed;//you wu an l
-	public static bool right_pressed;//you wu an 
+	public static bool left_button_pressed;//you wu an l
+	public static bool right_button_pressed;//you wu an 
 
 	public static IList<GameObject> circles = new List<GameObject>();
 	public static int time = 0;
@@ -76,7 +76,6 @@ public class MainMusic : MonoBehaviour {
 						time++;
 						if (lastCircle == null) {
 //							Press.re = true;
-							Debug.Log(pressed);
 							rightButton.gameObject.GetComponent<Press>().reset();
 						}
 					}
@@ -99,7 +98,6 @@ public class MainMusic : MonoBehaviour {
 						time++;
 						if (lastCircle == null) {
 //							Press.re = true;
-							Debug.Log(pressed);
 							leftButton.gameObject.GetComponent<Press>().reset();
 						}
 
@@ -111,8 +109,8 @@ public class MainMusic : MonoBehaviour {
 			} else {
 				float temp = Random.value;
 				count = 25;
-				left_pressed = false;
-				right_pressed = false;
+				left_button_pressed = false;
+				right_button_pressed = false;
 				circles.Clear ();
 				time = 0;
 				if (temp < 0.15f) {
