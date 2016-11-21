@@ -132,96 +132,12 @@ public class MainMusic : MonoBehaviour {
 				left_pressed = 0;
 				right_pressed = 0;
 			}
-
-
-
-
-//			if (action) {
-//				if (sliding) {
-//					Debug.Log ("moving circle");
-//					if (count > 0) {
-//						GameObject obj = (GameObject)Instantiate (circle, transform.position + new Vector3 (0f, 0f, 5.0f), Quaternion.Euler (0, 0, 0));
-//						if (count == 500) {
-//							firstCircle = obj;
-//						} else if (count == 1) {
-//							lastCircle = obj;
-//						}
-//
-//						obj.transform.SetParent (GameObject.Find ("BattleUI").transform);
-//						if (isRight) {
-//							obj.transform.localPosition = new Vector3 (-580.0f, 0f, 10);
-//						} else {
-//							obj.transform.localPosition = new Vector3 (580.0f, 0f, 10);
-//
-//						}
-//						count -= 1;
-//						return;
-//					} else {
-//						//reset
-//						if (lastCircle == null) {
-//							action = false;
-//						}
-//					
-//					}
-//
-//				} else {
-//					Debug.Log ("scale circle");
-//					if ((!isRight && turnType != 2)
-//					    || (isRight && turnType != 1)) {
-//						if (gameObject.transform.localScale.x >= 0.1) {
-//
-//							if ((isRight && right == 0) || (!isRight && once == 0)) {
-//								gameObject.transform.localScale = new Vector3 (0, 0, 0);
-//							}
-//
-//							float collapse_factor = 2f * collapse_rate * Time.deltaTime;
-//							gameObject.transform.localScale -= new Vector3 (collapse_factor, collapse_factor, collapse_factor);
-//							rotation = (rotation + (isRight ? 1 : -1) * 240f * Time.deltaTime) % 360;
-//							gameObject.transform.localRotation = Quaternion.Euler (0, 0, rotation);
-//						} else {
-//							collapse_rate = Random.value * (0.5f) + 0.3f;
-//							MusicParameters.count += 1;
-//							if (isRight) {
-//								right = 1;
-//							} else {
-//								once = 1;
-//							}
-//							float temp = Random.value;
-//							if (temp <= 0.5f) {
-//								MainMusic.turnType = 1;
-//							} else {
-//								MainMusic.turnType = 2;
-//							}
-//							if (isRight && MainMusic.turnType != 1) {
-//								gameObject.transform.localScale = new Vector3 (1, 1, 1);
-//							} else if (!isRight && MainMusic.turnType != 2) {
-//								gameObject.transform.localScale = new Vector3 (1, 1, 1);
-//							}
-//							action = false;
-//
-//						}
-//					}
-//				}
-//
-//			} else {
-//				//reset
-//				float temp = Random.value;
-//				if (temp <= 0.2f) {
-//					MainMusic.sliding = true;
-//					count = 50;
-//					//gameObject.transform.localScale = new Vector3 (0.0f, 0.0f, 0.0f);
-//
-//				} else {
-//					MainMusic.sliding = false;
-//
-//				}
-//				action = true;
-//			}
+				
 		} 
 	}
 
 	public static float getCloest(){
-		float min = 300.0f;
+		float min = 280.0f;
 		int j = 0;
 		for (int i = 0; i < circles.Count; i++) {
 			if (circles [i] != null && ( 580.0f - System.Math.Abs (circles [i].transform.localPosition.x)) < min) {
