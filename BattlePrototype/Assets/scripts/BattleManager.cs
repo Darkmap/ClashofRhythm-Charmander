@@ -296,10 +296,10 @@ public class BattleManager : MonoBehaviour {
 		if (performance <= 0) {
 			performanceType = 1;
 			performanceText = "Terrible :(";
-		} else if(performance <= 0.2) {
+		} else if(performance <= 0.3) {
 			performanceType = 2;
 			performanceText = "It's OK.";
-		} else if(performance <= 0.4) {
+		} else if(performance <= 0.6) {
 			performanceType = 3;
 			performanceText = "Good!";
 		} else{
